@@ -1,16 +1,24 @@
 {
   "name": "com.unibridge.core",
-  "version": "1.3.34",
+  "version": "1.0.0",
   "displayName": "UniBridge",
-  "description": "Universal advertisement integration for Unity - supports LevelPlay (Android/iOS) and Playgama (WebGL)",
+  "description": "Unified cross-platform bridge for Unity: ads, in-app purchases, leaderboards, cloud saves, ratings, sharing, analytics and authentication with a single API across Google Play, App Store, RuStore and Playgama (WebGL)",
   "unity": "2021.3",
   "keywords": [
     "ads",
-    "advertisement",
+    "iap",
+    "purchases",
+    "leaderboards",
+    "saves",
+    "analytics",
+    "sharing",
+    "authentication",
     "levelplay",
-    "ironsource",
     "playgama",
-    "webgl"
+    "rustore",
+    "appmetrica",
+    "webgl",
+    "cross-platform"
   ],
   "author": {
     "name": "UniBridge"
