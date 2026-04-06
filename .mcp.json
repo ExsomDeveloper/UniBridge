@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "unity": {
+      "command": "node",
+      "args": [
+        "-e",
+        "require(require('os').homedir() + '/.claude/mcp-bridge-unity.js')"
+      ],
+      "env": {
+        "MCP_PORT": "9876"
+      }
+    }
+  }
+}

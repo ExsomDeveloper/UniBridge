@@ -1,0 +1,21 @@
+{
+    "name": "UniBridge.Rate.RuStore",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Rate.Runtime",
+        "RuStoreReview"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "RuStoreReview"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGERATE_RUSTORE"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

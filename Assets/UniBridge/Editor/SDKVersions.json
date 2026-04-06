@@ -1,0 +1,105 @@
+{
+    "levelplay": {
+        "version": "9.3.0",
+        "packageId": "com.unity.services.levelplay",
+        "gitUrl": "",
+        "define": "UNIBRIDGE_LEVELPLAY",
+        "displayName": "LevelPlay",
+        "checkMode": "define"
+    },
+    "playgama": {
+        "version": "1.27.0",
+        "packageId": "com.playgama.bridge",
+        "gitUrl": "https://github.com/playgama/bridge-unity.git#v1.27.0",
+        "define": "UNIBRIDGE_PLAYGAMA",
+        "displayName": "Playgama Bridge",
+        "checkMode": "define"
+    },
+    "edm4u": {
+        "version": "1.2.185",
+        "packageId": "com.google.external-dependency-manager",
+        "gitUrl": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.185",
+        "define": "",
+        "displayName": "EDM4U",
+        "checkMode": "package"
+    },
+    "yandex": {
+        "version": "7.18.1",
+        "packageId": "com.yandex.mobileads",
+        "gitUrl": "",
+        "define": "UNIBRIDGE_YANDEX",
+        "displayName": "Yandex Mobile Ads",
+        "checkMode": "define",
+        "registryUrl": "https://package.openupm.com",
+        "registryScopes": "com.yandex;com.google"
+    },
+    "unityiap": {
+        "version": "4.12.2",
+        "packageId": "com.unity.purchasing",
+        "gitUrl": "",
+        "define": "UNIBRIDGEPURCHASES_IAP",
+        "displayName": "Unity IAP",
+        "checkMode": "define"
+    },
+    "rustore": {
+        "version": "10.1.1",
+        "packageId": "ru.rustore.pay",
+        "corePackageId": "ru.rustore.core",
+        "gitUrl": "https://gitflic.ru/project/rustore/unity-rustore-pay-sdk/release/95b8ea3f-33e3-4def-9663-5d05b64cc915/23733e93-f48d-49e6-bd25-0bc95db90c21/download",
+        "coreUrl": "https://gitflic.ru/project/rustore/unity-rustore-pay-sdk/release/95b8ea3f-33e3-4def-9663-5d05b64cc915/2db3b359-e24f-4888-b7f3-013b8e79200f/download",
+        "define": "UNIBRIDGEPURCHASES_RUSTORE",
+        "displayName": "RuStore Pay",
+        "checkMode": "define"
+    },
+    "gpgs": {
+        "version": "1.0.0",
+        "packageId": "com.google.play.games",
+        "gitUrl": "",
+        "define": "UNIBRIDGELEADERBOARDS_GPGS",
+        "displayName": "Google Play Games Services",
+        "checkMode": "define"
+    },
+    "googlePlayReview": {
+        "version": "1.2.4",
+        "packageId": "com.google.play.review",
+        "gitUrl": "",
+        "define": "UNIBRIDGERATE_GOOGLEPLAY",
+        "displayName": "Google Play Review",
+        "checkMode": "define",
+        "registryUrl": "https://package.openupm.com",
+        "registryScopes": "com.google.play"
+    },
+    "rustoreReview": {
+        "version": "10.1.0",
+        "packageId": "ru.rustore.review",
+        "corePackageId": "ru.rustore.core",
+        "gitUrl": "https://gitflic.ru/project/rustore/unity-rustore-review-sdk/release/10d67f2c-328b-4bc6-a5fd-bb9cf9879b12/82120b8c-bb34-4073-8572-4da90a9412fe/download",
+        "coreUrl": "https://gitflic.ru/project/rustore/unity-rustore-pay-sdk/release/95b8ea3f-33e3-4def-9663-5d05b64cc915/2db3b359-e24f-4888-b7f3-013b8e79200f/download",
+        "define": "UNIBRIDGERATE_RUSTORE",
+        "displayName": "RuStore Review",
+        "checkMode": "define"
+    },
+    "appmetrica": {
+        "version": "6.8.0",
+        "packageId": "io.appmetrica.analytics",
+        "gitUrl": "https://github.com/appmetrica/appmetrica-unity-plugin.git#v6.8.0",
+        "define": "UNIBRIDGEANALYTICS_APPMETRICA",
+        "displayName": "AppMetrica",
+        "checkMode": "define"
+    },
+    "yandexMediationAdapters": [
+        { "displayName": "Google AdMob",  "adapterKey": "google",      "version": "7.18.1", "detectionFile": "GoogleMobileadsMediationDependencies"  },
+        { "displayName": "AppLovin",      "adapterKey": "applovin",    "version": "7.18.1", "detectionFile": "ApplovinMediationDependencies"          },
+        { "displayName": "IronSource",    "adapterKey": "ironsource",  "version": "7.18.1", "detectionFile": "IronsourceMediationDependencies"        },
+        { "displayName": "MyTarget",      "adapterKey": "mytarget",    "version": "7.18.1", "detectionFile": "MytargetMediationDependencies"          },
+        { "displayName": "Unity Ads",     "adapterKey": "unityads",    "version": "7.18.1", "detectionFile": "UnityAdsMediationDependencies"          },
+        { "displayName": "Mintegral",     "adapterKey": "mintegral",   "version": "7.18.1", "detectionFile": "MintegralMediationDependencies"         },
+        { "displayName": "InMobi",        "adapterKey": "inmobi",      "version": "7.18.1", "detectionFile": "InmobiMediationDependencies"            },
+        { "displayName": "Chartboost",    "adapterKey": "chartboost",  "version": "7.18.1", "detectionFile": "ChartboostMediationDependencies"        },
+        { "displayName": "Pangle",        "adapterKey": "pangle",      "version": "7.18.1", "detectionFile": "PangleMediationDependencies"            },
+        { "displayName": "Vungle",        "adapterKey": "vungle",      "version": "7.18.1", "detectionFile": "VungleMediationDependencies"            },
+        { "displayName": "StartApp",      "adapterKey": "startapp",    "version": "7.18.1", "detectionFile": "StartappMediationDependencies"          },
+        { "displayName": "Tapjoy",        "adapterKey": "tapjoy",      "version": "7.18.1", "detectionFile": "TapjoyMediationDependencies"            },
+        { "displayName": "BIGO Ads",      "adapterKey": "bigoads",     "version": "7.18.1", "detectionFile": "BigoAdsMediationDependencies"           }
+    ]
+}

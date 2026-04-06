@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Leaderboards.Editor",
+    "rootNamespace": "UniBridge.Editor",
+    "references": [
+        "UniBridge.Leaderboards.Runtime",
+        "UniBridge.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

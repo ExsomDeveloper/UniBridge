@@ -1,0 +1,45 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__coplay-mcp__check_compile_errors",
+      "mcp__coplay-mcp__get_unity_logs",
+      "mcp__ide__getDiagnostics",
+      "mcp__coplay-mcp__create_panel_settings_asset",
+      "mcp__coplay-mcp__create_game_object",
+      "mcp__coplay-mcp__add_component",
+      "mcp__coplay-mcp__set_property",
+      "mcp__coplay-mcp__save_scene",
+      "mcp__coplay-mcp__capture_scene_object",
+      "mcp__coplay-mcp__play_game",
+      "mcp__coplay-mcp__open_scene",
+      "mcp__coplay-mcp__execute_script",
+      "WebSearch",
+      "WebFetch(domain:yandex.ru)",
+      "WebFetch(domain:yandex.com)",
+      "WebFetch(domain:docs.unity3d.com)",
+      "WebFetch(domain:www.rustore.ru)",
+      "WebFetch(domain:wiki.playgama.com)",
+      "WebFetch(domain:github.com)",
+      "mcp__coplay-mcp__remove_component",
+      "mcp__coplay-mcp__get_unity_editor_state",
+      "mcp__coplay-mcp__list_game_objects_in_hierarchy",
+      "mcp__coplay-mcp__capture_ui_canvas",
+      "mcp__coplay-mcp__stop_game",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:api.github.com)",
+      "WebFetch(domain:package.openupm.com)",
+      "WebFetch(domain:gitflic.ru)",
+      "Bash(xargs grep:*)",
+      "Bash(xargs cat:*)",
+      "mcp__coplay-mcp__list_files",
+      "mcp__coplay-mcp__set_unity_project_root",
+      "mcp__coplay-mcp__read_file",
+      "Bash(grep:*)",
+      "Bash(test:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "unity"
+  ]
+}

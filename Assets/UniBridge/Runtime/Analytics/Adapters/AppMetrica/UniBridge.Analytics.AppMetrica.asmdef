@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Analytics.AppMetrica",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Analytics.Runtime",
+        "AppMetrica"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGEANALYTICS_APPMETRICA"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

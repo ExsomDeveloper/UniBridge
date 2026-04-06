@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0610165dd7184cb4d9fed57f5c23cec8, type: 3}
+  m_Name: UniBridgeConfig
+  m_EditorClassIdentifier: 
+  AutoInitialize: 1
+  MaxChildrenAge: 12
+  DefaultUserAge: 18
+  AdsDisabledKey: unibridge_disabled
+  SuccessfulRewardResetInterstitial: 1
+  InterstitialMode: 0
+  AutoInterstitialInterval: 60
+  EnableManualCooldown: 0
+  ManualCooldownInterval: 60
+  AutoInitializeSaves: 1
+  PreferredAdsAdapter: 
+  _levelPlaySettings:
+    <AndroidKey>k__BackingField: 
+    <IOSKey>k__BackingField: 
+    <BannerAdUnitAndroid>k__BackingField: 
+    <BannerAdUnitIOS>k__BackingField: 
+    <InterstitialAdUnitAndroid>k__BackingField: 
+    <InterstitialAdUnitIOS>k__BackingField: 
+    <RewardAdUnitAndroid>k__BackingField: 
+    <RewardAdUnitIOS>k__BackingField: 
+  _playgamaSettings:
+    <AutoShowBanner>k__BackingField: 0
+    <DisableBannerOnPlatforms>k__BackingField: 
+    <MinInterstitialInterval>k__BackingField: 60
+    <YandexInterstitialCountdownSeconds>k__BackingField: 3
+    <SimulateYandexCountdownInEditor>k__BackingField: 0
+    <DisableInterstitialOnPlatforms>k__BackingField: 
+    <PreloadRewardedAds>k__BackingField: 1
+    <DisableRewardOnPlatforms>k__BackingField: 
+  _yandexSettings:
+    <BannerAdUnitAndroid>k__BackingField: 
+    <BannerAdUnitIOS>k__BackingField: 
+    <InterstitialAdUnitAndroid>k__BackingField: 
+    <InterstitialAdUnitIOS>k__BackingField: 
+    <RewardedAdUnitAndroid>k__BackingField: 
+    <RewardedAdUnitIOS>k__BackingField: 

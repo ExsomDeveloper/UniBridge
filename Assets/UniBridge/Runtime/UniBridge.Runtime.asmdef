@@ -1,0 +1,31 @@
+{
+  "name": "UniBridge.Runtime",
+  "rootNamespace": "UniBridge",
+  "references": [
+    "Newtonsoft.Json",
+    "UniBridge.Leaderboards.Runtime",
+    "UniBridge.Purchases.Runtime",
+    "UniBridge.Rate.Runtime",
+    "UniBridge.Share.Runtime"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.services.levelplay",
+      "expression": "",
+      "define": "UNIBRIDGE_LEVELPLAY"
+    },
+    {
+      "name": "com.playgama.bridge",
+      "expression": "",
+      "define": "UNIBRIDGE_PLAYGAMA"
+    }
+  ],
+  "noEngineReferences": false
+}

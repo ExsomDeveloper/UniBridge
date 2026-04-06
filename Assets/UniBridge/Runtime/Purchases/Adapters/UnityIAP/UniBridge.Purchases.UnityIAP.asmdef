@@ -1,0 +1,25 @@
+{
+  "name": "UniBridge.Purchases.UnityIAP",
+  "rootNamespace": "UniBridge",
+  "references": [
+    "UniBridge.Purchases.Runtime",
+    "UnityEngine.Purchasing"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNIBRIDGEPURCHASES_IAP"
+  ],
+  "versionDefines": [
+    {
+      "name": "com.unity.purchasing",
+      "expression": "",
+      "define": "UNIBRIDGEPURCHASES_IAP"
+    }
+  ],
+  "noEngineReferences": false
+}

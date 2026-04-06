@@ -1,0 +1,86 @@
+{
+    "presets": [
+        {
+            "displayName": "Playgama",
+            "define": "UNIBRIDGE_STORE_PLAYGAMA",
+            "buildTarget": "WebGL",
+            "adsAdapter": "UNIBRIDGE_PLAYGAMA",
+            "purchasesAdapter": "UNIBRIDGE_PLAYGAMA",
+            "leaderboardsAdapter": "UNIBRIDGE_PLAYGAMA",
+            "rateAdapter": "UNIBRIDGE_PLAYGAMA",
+            "shareAdapter": "UNIBRIDGE_PLAYGAMA",
+            "savesAdapter": "UNIBRIDGE_PLAYGAMA",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNIBRIDGE_PLAYGAMA",
+            "sdkDefines": [
+                "UNIBRIDGE_PLAYGAMA"
+            ]
+        },
+        {
+            "displayName": "RuStore",
+            "define": "UNIBRIDGE_STORE_RUSTORE",
+            "buildTarget": "Android",
+            "adsAdapter": "UNIBRIDGE_YANDEX",
+            "purchasesAdapter": "UNIBRIDGEPURCHASES_RUSTORE",
+            "leaderboardsAdapter": "UNIBRIDGELEADERBOARDS_SIMULATED",
+            "rateAdapter": "UNIBRIDGERATE_MOCK",
+            "shareAdapter": "UNIBRIDGESHARE_ANDROID",
+            "savesAdapter": "UNIBRIDGESAVES_SIMULATED",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNIBRIDGEAUTH_MOCK",
+            "sdkDefines": [
+                "com.google.external-dependency-manager",
+                "UNIBRIDGE_YANDEX",
+                "UNIBRIDGEPURCHASES_RUSTORE"
+            ]
+        },
+        {
+            "displayName": "Unity Editor",
+            "define": "UNIBRIDGE_STORE_EDITOR",
+            "buildTarget": "Editor",
+            "adsAdapter": "UNIBRIDGE_NONE",
+            "purchasesAdapter": "UNIBRIDGE_NONE",
+            "leaderboardsAdapter": "UNIBRIDGE_NONE",
+            "rateAdapter": "UNIBRIDGE_NONE",
+            "shareAdapter": "UNIBRIDGESHARE_MOCK",
+            "savesAdapter": "UNIBRIDGESAVES_SIMULATED",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNIBRIDGEAUTH_MOCK",
+            "sdkDefines": []
+        },
+        {
+            "displayName": "Google Play",
+            "define": "UNIBRIDGE_STORE_GOOGLEPLAY",
+            "buildTarget": "Android",
+            "adsAdapter": "UNIBRIDGE_YANDEX",
+            "purchasesAdapter": "UNIBRIDGEPURCHASES_IAP",
+            "leaderboardsAdapter": "UNIBRIDGELEADERBOARDS_GPGS",
+            "rateAdapter": "UNIBRIDGERATE_GOOGLEPLAY",
+            "shareAdapter": "UNIBRIDGESHARE_ANDROID",
+            "savesAdapter": "UNIBRIDGESAVES_GPGS",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNIBRIDGELEADERBOARDS_GPGS",
+            "sdkDefines": [
+                "com.google.external-dependency-manager",
+                "UNIBRIDGE_YANDEX"
+            ]
+        },
+        {
+            "displayName": "App Store",
+            "define": "UNIBRIDGE_STORE_APPSTORE",
+            "buildTarget": "iOS",
+            "adsAdapter": "UNIBRIDGE_LEVELPLAY",
+            "purchasesAdapter": "UNIBRIDGEPURCHASES_IAP",
+            "leaderboardsAdapter": "UNITY_IOS_GAMECENTER",
+            "rateAdapter": "UNITY_IOS_STOREREVIEW",
+            "shareAdapter": "UNIBRIDGESHARE_IOS",
+            "savesAdapter": "UNITY_IOS_ICLOUD",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNITY_IOS_GAMECENTER",
+            "sdkDefines": [
+                "UNIBRIDGE_LEVELPLAY",
+                "UNIBRIDGEPURCHASES_IAP"
+            ]
+        }
+    ]
+}

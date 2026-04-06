@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Share.Playgama",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Share.Runtime",
+        "Playgama.Bridge"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGE_PLAYGAMA"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

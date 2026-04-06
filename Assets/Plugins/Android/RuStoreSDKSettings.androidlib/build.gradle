@@ -1,0 +1,15 @@
+apply plugin: 'com.android.library'
+
+android {
+    namespace 'ru.rustore.unitysdk.settings'
+    compileSdkVersion 34
+    buildToolsVersion '34.0.0'
+
+    defaultConfig {
+        minSdkVersion 24
+    }
+
+    buildFeatures {
+        buildConfig false
+    }
+}

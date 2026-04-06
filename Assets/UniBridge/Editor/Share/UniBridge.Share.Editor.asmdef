@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Share.Editor",
+    "rootNamespace": "UniBridge.Editor",
+    "references": [
+        "UniBridge.Share.Runtime",
+        "UniBridge.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

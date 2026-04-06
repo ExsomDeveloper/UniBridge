@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- UNIBRIDGE_RUSTORE_GENERATED -->
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <application>
+    <!-- RuStore Pay SDK: console application ID -->
+    <meta-data
+        android:name="console_app_id_value"
+        android:value="" />
+    <!-- RuStore Pay SDK: deeplink handler (provided by ru.rustore.pay package) -->
+    <activity
+        android:name="ru.rustore.unitysdk.RuStoreIntentFilterActivity"
+        android:theme="@android:style/Theme.NoDisplay"
+        android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="yourapp" />
+      </intent-filter>
+    </activity>
+  </application>
+</manifest>

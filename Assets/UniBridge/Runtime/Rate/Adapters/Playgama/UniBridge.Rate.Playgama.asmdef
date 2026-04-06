@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Rate.Playgama",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Rate.Runtime",
+        "Playgama.Bridge"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGE_PLAYGAMA"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

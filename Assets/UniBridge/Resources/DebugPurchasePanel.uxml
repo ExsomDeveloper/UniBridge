@@ -1,0 +1,21 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="DebugPurchasePanel.uss" />
+
+    <ui:VisualElement name="overlay" class="dp-overlay">
+        <ui:VisualElement name="dialog" class="dp-dialog">
+
+            <ui:Label text="DEBUG PURCHASE" class="dp-badge" />
+
+            <ui:Label name="product-name"  class="dp-product-name"  text="product_id" />
+            <ui:Label name="product-price" class="dp-product-price" text="$0.99" />
+            <ui:Label name="product-type"  class="dp-product-type"  text="CONSUMABLE" />
+
+            <ui:VisualElement class="dp-buttons">
+                <ui:Button name="btn-confirm" text="Купить"    class="dp-btn-confirm" />
+                <ui:Button name="btn-cancel"  text="Отменить"  class="dp-btn-cancel" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+    </ui:VisualElement>
+
+</ui:UXML>

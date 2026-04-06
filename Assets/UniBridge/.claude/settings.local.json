@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__coplay-mcp__get_unity_logs",
+      "mcp__coplay-mcp__check_compile_errors",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(xargs grep:*)",
+      "Bash(xargs cat:*)",
+      "WebFetch(domain:gitflic.ru)",
+      "WebSearch",
+      "WebFetch(domain:www.rustore.ru)",
+      "Bash(git rm:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "unity"
+  ]
+}

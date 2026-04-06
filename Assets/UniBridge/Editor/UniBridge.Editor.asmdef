@@ -1,0 +1,35 @@
+{
+  "name": "UniBridge.Editor",
+  "rootNamespace": "UniBridge.Editor",
+  "references": [
+    "UniBridge.Runtime",
+    "UniBridge.Purchases.Runtime",
+    "UniBridge.Leaderboards.Runtime",
+    "UniBridge.Rate.Runtime",
+    "UniBridge.Auth.Runtime",
+    "UniBridge.Analytics.Runtime",
+    "StoreScreenshots.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [
+    {
+      "name": "com.unity.services.levelplay",
+      "expression": "",
+      "define": "UNIBRIDGE_LEVELPLAY"
+    },
+    {
+      "name": "com.playgama.bridge",
+      "expression": "",
+      "define": "UNIBRIDGE_PLAYGAMA"
+    }
+  ],
+  "noEngineReferences": false
+}

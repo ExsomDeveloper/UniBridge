@@ -1,0 +1,25 @@
+{
+    "name": "UniBridge.LevelPlay",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Runtime",
+        "Unity.LevelPlay"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGE_LEVELPLAY"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.services.levelplay",
+            "expression": "",
+            "define": "UNIBRIDGE_LEVELPLAY"
+        }
+    ],
+    "noEngineReferences": false
+}

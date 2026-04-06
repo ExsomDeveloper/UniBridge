@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Rate.GooglePlay",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Rate.Runtime",
+        "Google.Play.Review"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGERATE_GOOGLEPLAY"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

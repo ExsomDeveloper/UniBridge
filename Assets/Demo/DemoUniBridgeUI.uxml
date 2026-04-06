@@ -1,0 +1,56 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="DemoUniBridgeUI.uss" />
+
+    <ui:VisualElement name="root" class="root">
+
+        <ui:VisualElement name="header" class="header">
+            <ui:Label text="UniBridge Demo" class="header-title" />
+            <ui:Label name="adapter-label" text="Adapter: —" class="header-adapter" />
+        </ui:VisualElement>
+
+        <ui:VisualElement name="status-box" class="status-box">
+            <ui:Label name="status-label" text="Status: —" class="status-label" />
+        </ui:VisualElement>
+
+        <!-- Banner -->
+        <ui:VisualElement name="section-banner" class="section">
+            <ui:Label text="BANNER" class="section-header" />
+            <ui:VisualElement class="button-row">
+                <ui:Button name="btn-banner-show"    text="Show"    class="btn btn-green" />
+                <ui:Button name="btn-banner-hide"    text="Hide"    class="btn btn-yellow" />
+                <ui:Button name="btn-banner-destroy" text="Destroy" class="btn btn-red" />
+            </ui:VisualElement>
+            <ui:Label name="banner-ready-label" text="Ready: —" class="ready-label" />
+        </ui:VisualElement>
+
+        <!-- Interstitial -->
+        <ui:VisualElement name="section-interstitial" class="section">
+            <ui:Label text="INTERSTITIAL" class="section-header" />
+            <ui:VisualElement class="button-row">
+                <ui:Button name="btn-interstitial-show" text="Show" class="btn btn-blue" />
+            </ui:VisualElement>
+            <ui:Label name="interstitial-ready-label" text="Ready: —" class="ready-label" />
+        </ui:VisualElement>
+
+        <!-- Reward -->
+        <ui:VisualElement name="section-reward" class="section">
+            <ui:Label text="REWARD" class="section-header" />
+            <ui:VisualElement class="button-row">
+                <ui:Button name="btn-reward-show" text="Show" class="btn btn-blue" />
+            </ui:VisualElement>
+            <ui:Label name="reward-ready-label" text="Ready: —" class="ready-label" />
+        </ui:VisualElement>
+
+        <!-- Misc -->
+        <ui:VisualElement name="section-misc" class="section">
+            <ui:Label text="MISC" class="section-header" />
+            <ui:VisualElement class="button-row">
+                <ui:Button name="btn-disable-ads" text="Disable Ads"     class="btn btn-red" />
+                <ui:Button name="btn-enable-ads"  text="Enable Ads"      class="btn btn-green" />
+                <ui:Button name="btn-refresh"     text="Refresh Status"  class="btn btn-grey" />
+            </ui:VisualElement>
+            <ui:Label name="init-label" text="Initialized: —" class="ready-label" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

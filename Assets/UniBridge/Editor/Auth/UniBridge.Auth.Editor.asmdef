@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Auth.Editor",
+    "rootNamespace": "UniBridge.Editor",
+    "references": [
+        "UniBridge.Auth.Runtime",
+        "UniBridge.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

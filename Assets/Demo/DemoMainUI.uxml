@@ -1,0 +1,243 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" editor-extension-mode="False">
+    <Style src="DemoMainUI.uss" />
+
+    <ui:VisualElement name="root" class="root">
+
+        <!-- ── MAIN PAGE ─────────────────────────────────────────────── -->
+        <ui:VisualElement name="main-page" class="page main-page">
+            <ui:Label text="UniBridge Demo Suite" class="main-title" />
+            <ui:Label name="main-status-label" text="Loading..." class="main-subtitle" />
+            <ui:Button name="btn-go-ads"          text="UniBridge →"          class="btn nav-btn btn-blue" />
+            <ui:Button name="btn-go-purchases"    text="UniBridgePurchases →"    class="btn nav-btn btn-green" />
+            <ui:Button name="btn-go-leaderboards" text="UniBridgeLeaderboards →" class="btn nav-btn btn-yellow" />
+            <ui:Button name="btn-go-rate"         text="UniBridgeRate →"         class="btn nav-btn btn-purple" />
+            <ui:Button name="btn-go-share"        text="UniBridgeShare →"        class="btn nav-btn btn-blue" />
+            <ui:Button name="btn-go-saves"        text="UniBridgeSaves →"        class="btn nav-btn btn-yellow" />
+        </ui:VisualElement>
+
+        <!-- ── ADS PAGE ──────────────────────────────────────────────── -->
+        <ui:VisualElement name="ads-page" class="page" style="display: none;">
+
+            <ui:VisualElement class="back-header">
+                <ui:Button name="btn-back-ads" text="← Back" class="btn btn-grey back-btn" />
+                <ui:Label text="UniBridge Demo" class="header-title" />
+                <ui:Label name="adapter-label" text="Adapter: —" class="header-adapter" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="status-box">
+                <ui:Label name="status-label" text="Status: —" class="status-label" />
+            </ui:VisualElement>
+
+            <!-- Banner -->
+            <ui:VisualElement class="section">
+                <ui:Label text="BANNER" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-banner-show"    text="Show"    class="btn btn-green" />
+                    <ui:Button name="btn-banner-hide"    text="Hide"    class="btn btn-yellow" />
+                    <ui:Button name="btn-banner-destroy" text="Destroy" class="btn btn-red" />
+                </ui:VisualElement>
+                <ui:Label name="banner-ready-label" text="Ready: —" class="ready-label" />
+            </ui:VisualElement>
+
+            <!-- Interstitial -->
+            <ui:VisualElement class="section">
+                <ui:Label text="INTERSTITIAL" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-interstitial-show" text="Show" class="btn btn-blue" />
+                </ui:VisualElement>
+                <ui:Label name="interstitial-ready-label" text="Ready: —" class="ready-label" />
+            </ui:VisualElement>
+
+            <!-- Reward -->
+            <ui:VisualElement class="section">
+                <ui:Label text="REWARD" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-reward-show" text="Show" class="btn btn-blue" />
+                </ui:VisualElement>
+                <ui:Label name="reward-ready-label" text="Ready: —" class="ready-label" />
+            </ui:VisualElement>
+
+            <!-- Misc -->
+            <ui:VisualElement class="section">
+                <ui:Label text="MISC" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-disable-ads" text="Disable Ads"    class="btn btn-red" />
+                    <ui:Button name="btn-enable-ads"  text="Enable Ads"     class="btn btn-green" />
+                    <ui:Button name="btn-refresh"     text="Refresh Status" class="btn btn-grey" />
+                </ui:VisualElement>
+                <ui:Label name="init-label" text="Initialized: —" class="ready-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ── PURCHASES PAGE ────────────────────────────────────────── -->
+        <ui:VisualElement name="purchases-page" class="page" style="display: none;">
+
+            <ui:VisualElement class="back-header">
+                <ui:Button name="btn-back-purchases" text="← Back" class="btn btn-grey back-btn" />
+                <ui:Label text="UniBridgePurchases Demo" class="header-title" />
+                <ui:Label name="purchase-adapter-label" text="Adapter: —" class="header-adapter" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="status-box">
+                <ui:Label name="purchase-status-label" text="Status: —" class="status-label" />
+            </ui:VisualElement>
+
+            <!-- Products list -->
+            <ui:VisualElement class="section">
+                <ui:Label text="PRODUCTS" class="section-header" />
+                <ui:ScrollView name="purchase-list" class="purchase-list" />
+            </ui:VisualElement>
+
+            <!-- Actions -->
+            <ui:VisualElement class="section">
+                <ui:Label text="ACTIONS" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-refresh-purchases" text="Refresh Purchases" class="btn btn-grey" />
+                    <ui:Button name="btn-restore-purchases" text="Restore Purchases" class="btn btn-blue" />
+                </ui:VisualElement>
+                <ui:Label name="purchase-init-label" text="Initialized: —" class="ready-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ── RATE PAGE ─────────────────────────────────────────── -->
+        <ui:VisualElement name="rate-page" class="page" style="display: none;">
+
+            <ui:VisualElement class="back-header">
+                <ui:Button name="btn-back-rate" text="← Back" class="btn btn-grey back-btn" />
+                <ui:Label text="UniBridgeRate Demo" class="header-title" />
+                <ui:Label name="rate-adapter-label" text="Adapter: —" class="header-adapter" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="status-box">
+                <ui:Label name="rate-status-label" text="Status: —" class="status-label" />
+            </ui:VisualElement>
+
+            <!-- Request Review -->
+            <ui:VisualElement class="section">
+                <ui:Label text="ОЦЕНКА" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-request-review" text="Запросить оценку" class="btn btn-green" />
+                </ui:VisualElement>
+                <ui:Label name="rate-supported-label"  text="Supported: —"    class="ready-label" />
+                <ui:Label name="rate-init-label"       text="Initialized: —"  class="ready-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ── SHARE PAGE ────────────────────────────────────────── -->
+        <ui:VisualElement name="share-page" class="page" style="display: none;">
+
+            <ui:VisualElement class="back-header">
+                <ui:Button name="btn-back-share" text="← Back" class="btn btn-grey back-btn" />
+                <ui:Label text="UniBridgeShare Demo" class="header-title" />
+                <ui:Label name="share-adapter-label" text="Adapter: —" class="header-adapter" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="status-box">
+                <ui:Label name="share-status-label" text="Status: —" class="status-label" />
+            </ui:VisualElement>
+
+            <!-- Share actions -->
+            <ui:VisualElement class="section">
+                <ui:Label text="ШАРИНГ" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-share-text"      text="Поделиться текстом"        class="btn btn-blue" />
+                    <ui:Button name="btn-share-image"     text="Поделиться картинкой"      class="btn btn-green" />
+                    <ui:Button name="btn-share-text-image" text="Текст + картинка"         class="btn btn-purple" />
+                </ui:VisualElement>
+                <ui:Label name="share-supported-label"  text="Supported: —"    class="ready-label" />
+                <ui:Label name="share-init-label"       text="Initialized: —"  class="ready-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ── SAVES PAGE ────────────────────────────────────────── -->
+        <ui:VisualElement name="saves-page" class="page" style="display: none;">
+
+            <ui:VisualElement class="back-header">
+                <ui:Button name="btn-back-saves" text="← Back" class="btn btn-grey back-btn" />
+                <ui:Label text="UniBridgeSaves Demo" class="header-title" />
+                <ui:Label name="saves-adapter-label" text="Adapter: —" class="header-adapter" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="status-box">
+                <ui:Label name="saves-status-label" text="Status: —" class="status-label" />
+            </ui:VisualElement>
+
+            <!-- Key / Value input -->
+            <ui:VisualElement class="section">
+                <ui:Label text="ДАННЫЕ" class="section-header" />
+                <ui:VisualElement class="input-row">
+                    <ui:TextField name="saves-key-field" label="Key" value="player_data" class="lb-input" />
+                </ui:VisualElement>
+                <ui:VisualElement class="input-row">
+                    <ui:TextField name="saves-value-field" label="Value (JSON)" value="{&quot;score&quot;:42}" class="lb-input" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+
+            <!-- Actions -->
+            <ui:VisualElement class="section">
+                <ui:Label text="ДЕЙСТВИЯ" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-saves-save"   text="Save"   class="btn btn-green" />
+                    <ui:Button name="btn-saves-load"   text="Load"   class="btn btn-blue" />
+                    <ui:Button name="btn-saves-delete" text="Delete" class="btn btn-red" />
+                    <ui:Button name="btn-saves-haskey" text="HasKey" class="btn btn-grey" />
+                </ui:VisualElement>
+                <ui:Label name="saves-init-label" text="Initialized: —" class="ready-label" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+        <!-- ── LEADERBOARDS PAGE ──────────────────────────────────── -->
+        <ui:VisualElement name="leaderboards-page" class="page" style="display: none;">
+
+            <ui:VisualElement class="back-header">
+                <ui:Button name="btn-back-leaderboards" text="← Back" class="btn btn-grey back-btn" />
+                <ui:Label text="UniBridgeLeaderboards Demo" class="header-title" />
+                <ui:Label name="lb-adapter-label" text="Adapter: —" class="header-adapter" />
+            </ui:VisualElement>
+
+            <ui:VisualElement class="status-box">
+                <ui:Label name="lb-status-label" text="Status: —" class="status-label" />
+            </ui:VisualElement>
+
+            <!-- Auth -->
+            <ui:VisualElement class="section">
+                <ui:Label text="AUTH" class="section-header" />
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-authenticate" text="Authenticate" class="btn btn-green" />
+                </ui:VisualElement>
+                <ui:Label name="lb-auth-label" text="Authenticated: — | Player: —" class="ready-label" />
+            </ui:VisualElement>
+
+            <!-- Submit / Query -->
+            <ui:VisualElement class="section">
+                <ui:Label text="SUBMIT SCORE" class="section-header" />
+                <ui:VisualElement class="input-row">
+                    <ui:TextField name="lb-id-field" label="Leaderboard ID" value="main_score" class="lb-input" />
+                </ui:VisualElement>
+                <ui:VisualElement class="input-row">
+                    <ui:TextField name="lb-score-field" label="Score" value="1000" class="lb-score-input" />
+                </ui:VisualElement>
+                <ui:VisualElement class="button-row">
+                    <ui:Button name="btn-submit-score"  text="Submit Score" class="btn btn-green" />
+                    <ui:Button name="btn-get-entries"   text="Get Top 10"   class="btn btn-blue" />
+                    <ui:Button name="btn-get-my-entry"  text="My Entry"     class="btn btn-blue" />
+                    <ui:Button name="btn-refresh-lb"    text="Refresh"      class="btn btn-grey" />
+                </ui:VisualElement>
+                <ui:Label name="lb-init-label" text="Initialized: —" class="ready-label" />
+            </ui:VisualElement>
+
+            <!-- Entries list -->
+            <ui:VisualElement class="section" style="flex-grow: 1;">
+                <ui:Label text="LEADERBOARD" class="section-header" />
+                <ui:ScrollView name="lb-entries-list" class="lb-list" />
+            </ui:VisualElement>
+
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>

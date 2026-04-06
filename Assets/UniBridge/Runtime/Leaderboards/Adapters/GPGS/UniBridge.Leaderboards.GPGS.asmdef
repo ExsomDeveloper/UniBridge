@@ -1,0 +1,20 @@
+{
+    "name": "UniBridge.Leaderboards.GPGS",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Leaderboards.Runtime",
+        "UniBridge.Auth.Runtime",
+        "GooglePlayGames"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGELEADERBOARDS_GPGS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

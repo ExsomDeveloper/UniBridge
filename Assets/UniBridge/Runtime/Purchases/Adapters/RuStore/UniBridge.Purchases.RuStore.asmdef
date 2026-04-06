@@ -1,0 +1,23 @@
+{
+  "name": "UniBridge.Purchases.RuStore",
+  "rootNamespace": "UniBridge",
+  "references": [
+    "UniBridge.Purchases.Runtime",
+    "RuStorePay",
+    "RuStoreCore"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [
+    "RuStorePay",
+    "RuStoreCore"
+  ],
+  "autoReferenced": false,
+  "defineConstraints": [
+    "UNIBRIDGEPURCHASES_RUSTORE"
+  ],
+  "versionDefines": [],
+  "noEngineReferences": false
+}

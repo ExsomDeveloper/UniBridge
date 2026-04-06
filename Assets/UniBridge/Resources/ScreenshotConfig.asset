@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f47e05500d44049f6849dce634d372bd, type: 3}
+  m_Name: ScreenshotConfig
+  m_EditorClassIdentifier: 
+  Hotkey: 293
+  RequireShift: 1
+  OutputFolder: /Users/exsom/Documents/Builds
+  Resolutions:
+  - Label: Android Phone
+    Width: 1080
+    Height: 1920
+    Enabled: 1
+  - Label: iPhone 6.7"
+    Width: 1290
+    Height: 2796
+    Enabled: 1
+  - Label: iPhone 6.5"
+    Width: 1284
+    Height: 2778
+    Enabled: 1
+  - Label: iPhone 5.5"
+    Width: 1242
+    Height: 2208
+    Enabled: 1
+  - Label: iPad 13"
+    Width: 2048
+    Height: 2732
+    Enabled: 1
+  - Label: Android Tablet 7"
+    Width: 1200
+    Height: 1920
+    Enabled: 1
+  - Label: Android Tablet 10"
+    Width: 1600
+    Height: 2560
+    Enabled: 1

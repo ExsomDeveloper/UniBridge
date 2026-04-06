@@ -1,0 +1,19 @@
+{
+    "name": "UniBridge.Yandex",
+    "rootNamespace": "UniBridge",
+    "references": [
+        "UniBridge.Runtime",
+        "YandexMobileAds"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNIBRIDGE_YANDEX"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
