@@ -555,7 +555,24 @@ namespace UniBridge.Editor
 
             var previousDefine = StorePlatformDefines.GetCurrentStoreDefine();
 
+            // Remove built-in SDK defines from previous store
+            if (previousDefine != null)
+            {
+                var prevPreset = StorePresetsManager.Load().Find(p => p.define == previousDefine);
+                if (prevPreset?.sdkDefines != null)
+                    foreach (var sdk in prevPreset.sdkDefines)
+                        if (IsBuiltInSdkDefine(sdk))
+                            ScriptingDefinesManager.RemoveDefine(sdk);
+            }
+
             StorePlatformDefines.SetStoreDefine(_selected.define);
+
+            // Add built-in SDK defines for selected store
+            if (_selected.sdkDefines != null)
+                foreach (var sdk in _selected.sdkDefines)
+                    if (IsBuiltInSdkDefine(sdk))
+                        ScriptingDefinesManager.AddDefine(sdk);
+
             ScriptingDefinesManager.Flush();
 
             // Write preferred adapter to UniBridgeConfig (runtime reads this to select adapter)
@@ -843,6 +860,16 @@ namespace UniBridge.Editor
             }
 
             return row;
+        }
+
+        /// <summary>
+        /// SDK defines that are bundled with UniBridge (no external package to install)
+        /// but still need to be real scripting defines for asmdef defineConstraints.
+        /// </summary>
+        private static bool IsBuiltInSdkDefine(string sdk)
+        {
+            if (string.IsNullOrEmpty(sdk)) return false;
+            return sdk == "UNIBRIDGE_YTPLAYABLES";
         }
 
         private static bool IsAdapterSdkInstalled(string sdkDefine, HashSet<string> installedDefines)
