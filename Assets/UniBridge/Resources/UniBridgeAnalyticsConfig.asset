@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: UniBridgeAnalyticsConfig
   m_EditorClassIdentifier: 
   AutoInitialize: 1
-  PreferredAnalyticsAdapter: 
+  PreferredAnalyticsAdapter: UNIBRIDGE_NONE
   AppMetrica:
     ApiKey: 

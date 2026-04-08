@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: UniBridgeRateConfig
   m_EditorClassIdentifier: 
   AutoInitialize: 1
-  PreferredRateAdapter: 
+  PreferredRateAdapter: UNIBRIDGE_NONE

@@ -9,12 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0681668a0f39d3a42bbb9edadec2469e, type: 3}
-  m_Name: UniBridgePurchasesConfig
+  m_Script: {fileID: 11500000, guid: b0f1ac7e571a8f84ca64f20db7345a57, type: 3}
+  m_Name: UniBridgeShareConfig
   m_EditorClassIdentifier: 
   AutoInitialize: 1
-  PreferredPurchaseAdapter: UNIBRIDGE_NONE
-  _products: []
-  _ruStoreSettings:
-    _consoleApplicationId: 
-    _deeplinkPrefix: yourapp://rustore
+  PreferredShareAdapter: UNIBRIDGESHARE_MOCK

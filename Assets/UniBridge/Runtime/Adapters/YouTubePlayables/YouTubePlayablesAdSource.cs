@@ -65,7 +65,7 @@ namespace UniBridge
         {
             var cb = _interstitialCallback;
             _interstitialCallback = null;
-            cb?.Invoke(AdStatus.Watched);
+            cb?.Invoke(AdStatus.Completed);
             _instance?.OnInterstitialClosed?.Invoke();
         }
 
