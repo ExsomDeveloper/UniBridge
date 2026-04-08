@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace UniBridge.Editor
@@ -30,14 +31,32 @@ namespace UniBridge.Editor
 
     public static class StorePresetsManager
     {
-        // ── Path ─────────────────────────────────────────────────────────────
-
-        private static string JsonPath =>
-            Path.Combine(Application.dataPath, "UniBridge/Editor/BuildManager/StorePresets.json");
-
         // ── Cache ─────────────────────────────────────────────────────────────
 
         private static List<StorePreset> _cache;
+
+        // ── Path Resolution ───────────────────────────────────────────────────
+
+        private static string FindJsonPath()
+        {
+            var guids = AssetDatabase.FindAssets("StorePresets t:TextAsset");
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (path.Contains("UniBridge") && path.EndsWith("StorePresets.json"))
+                    return path;
+            }
+
+            var directPath = "Assets/UniBridge/Editor/BuildManager/StorePresets.json";
+            if (File.Exists(directPath))
+                return directPath;
+
+            var packagePath = "Packages/com.unibridge.core/Editor/BuildManager/StorePresets.json";
+            if (File.Exists(packagePath))
+                return packagePath;
+
+            return null;
+        }
 
         // ── Public API ────────────────────────────────────────────────────────
 
@@ -46,12 +65,15 @@ namespace UniBridge.Editor
             if (_cache != null)
                 return _cache;
 
-            if (File.Exists(JsonPath))
+            var jsonPath = FindJsonPath();
+
+            if (jsonPath != null)
             {
                 try
                 {
-                    var json    = File.ReadAllText(JsonPath);
-                    var wrapper = JsonUtility.FromJson<StorePresetList>(json);
+                    var textAsset = AssetDatabase.LoadAssetAtPath<TextAsset>(jsonPath);
+                    var json      = textAsset != null ? textAsset.text : File.ReadAllText(jsonPath);
+                    var wrapper   = JsonUtility.FromJson<StorePresetList>(json);
                     if (wrapper?.presets != null && wrapper.presets.Count > 0)
                     {
                         _cache = wrapper.presets;
@@ -72,15 +94,25 @@ namespace UniBridge.Editor
         {
             _cache = presets;
 
+            var jsonPath = FindJsonPath();
+
+            if (jsonPath != null && jsonPath.StartsWith("Packages/"))
+            {
+                Debug.LogWarning("[UniBridge] StorePresets.json is inside a read-only UPM package; changes are saved in memory only.");
+                return;
+            }
+
+            var writePath = jsonPath ?? "Assets/UniBridge/Editor/BuildManager/StorePresets.json";
+
             try
             {
-                var dir = Path.GetDirectoryName(JsonPath);
+                var dir = Path.GetDirectoryName(writePath);
                 if (!Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
                 var wrapper = new StorePresetList { presets = presets };
                 var json    = JsonUtility.ToJson(wrapper, true);
-                File.WriteAllText(JsonPath, json);
+                File.WriteAllText(writePath, json);
             }
             catch (Exception e)
             {
@@ -168,6 +200,21 @@ namespace UniBridge.Editor
                 analyticsAdapter     = AdapterDefines.NoneAdapterKey,
                 authAdapter          = "UNIBRIDGE_PLAYGAMA",
                 sdkDefines           = new List<string> { "UNIBRIDGE_PLAYGAMA" }
+            },
+            new StorePreset
+            {
+                displayName          = "YouTube Playables",
+                define               = StorePlatformDefines.STORE_YOUTUBE,
+                buildTarget          = "WebGL",
+                adsAdapter           = "UNIBRIDGE_YTPLAYABLES",
+                purchasesAdapter     = AdapterDefines.NoneAdapterKey,
+                leaderboardsAdapter  = "UNIBRIDGE_YTPLAYABLES",
+                rateAdapter          = AdapterDefines.NoneAdapterKey,
+                shareAdapter         = AdapterDefines.NoneAdapterKey,
+                savesAdapter         = "UNIBRIDGE_YTPLAYABLES",
+                analyticsAdapter     = AdapterDefines.NoneAdapterKey,
+                authAdapter          = "UNIBRIDGEAUTH_MOCK",
+                sdkDefines           = new List<string> { "UNIBRIDGE_YTPLAYABLES" }
             }
         };
     }
