@@ -13,10 +13,11 @@ namespace UniBridge.Editor
 
         public static readonly Dictionary<string, string> AdsAdapterNames = new()
         {
-            { "UNIBRIDGE_LEVELPLAY", "LevelPlay" },
-            { "UNIBRIDGE_YANDEX",    "Yandex Ads" },
-            { "UNIBRIDGE_PLAYGAMA",  "Playgama" },
-            { NoneAdapterKey,     "Нет" },
+            { "UNIBRIDGE_LEVELPLAY",    "LevelPlay" },
+            { "UNIBRIDGE_YANDEX",       "Yandex Ads" },
+            { "UNIBRIDGE_PLAYGAMA",     "Playgama" },
+            { "UNIBRIDGE_YTPLAYABLES",  "YouTube Playables" },
+            { NoneAdapterKey,        "Нет" },
         };
 
         public static readonly Dictionary<string, string> PurchaseAdapterNames = new()
@@ -31,6 +32,7 @@ namespace UniBridge.Editor
         {
             { "UNIBRIDGELEADERBOARDS_GPGS",      "Google Play Games Services" },
             { "UNIBRIDGE_PLAYGAMA",           "Playgama" },
+            { "UNIBRIDGE_YTPLAYABLES",        "YouTube Playables" },
             { "UNITY_IOS_GAMECENTER",      "Game Center (built-in)" },
             { "UNIBRIDGELEADERBOARDS_SIMULATED", "Симуляция" },
             { NoneAdapterKey,              "Нет" },
@@ -60,6 +62,7 @@ namespace UniBridge.Editor
             { "UNIBRIDGESAVES_GPGS",      "Google Play Saved Games" },
             { "UNITY_IOS_ICLOUD",   "iCloud Key-Value Store (built-in)" },
             { "UNIBRIDGE_PLAYGAMA",    "Playgama" },
+            { "UNIBRIDGE_YTPLAYABLES", "YouTube Playables" },
             { "UNIBRIDGESAVES_SIMULATED", "Симуляция (PlayerPrefs)" },
             { NoneAdapterKey,       "Локальное хранилище" },
         };
@@ -91,7 +94,7 @@ namespace UniBridge.Editor
         public static string[] GetAdAdapters(string buildTarget) => buildTarget switch
         {
             "Android" or "iOS" => new[] { "UNIBRIDGE_LEVELPLAY", "UNIBRIDGE_YANDEX", NoneAdapterKey },
-            "WebGL"            => new[] { "UNIBRIDGE_PLAYGAMA", NoneAdapterKey },
+            "WebGL"            => new[] { "UNIBRIDGE_PLAYGAMA", "UNIBRIDGE_YTPLAYABLES", NoneAdapterKey },
             _                  => new[] { NoneAdapterKey },
         };
 
@@ -101,6 +104,7 @@ namespace UniBridge.Editor
             StorePlatformDefines.STORE_RUSTORE    => new[] { "UNIBRIDGEPURCHASES_RUSTORE", "UNIBRIDGEPURCHASES_IAP", NoneAdapterKey },
             StorePlatformDefines.STORE_APPSTORE   => new[] { "UNIBRIDGEPURCHASES_IAP", NoneAdapterKey },
             StorePlatformDefines.STORE_PLAYGAMA   => new[] { "UNIBRIDGE_PLAYGAMA", NoneAdapterKey },
+            StorePlatformDefines.STORE_YOUTUBE    => new[] { NoneAdapterKey },
             StorePlatformDefines.STORE_EDITOR     => new[] { NoneAdapterKey },
             _                                     => new[] { NoneAdapterKey },
         };
@@ -111,6 +115,7 @@ namespace UniBridge.Editor
             StorePlatformDefines.STORE_RUSTORE    => new[] { "UNIBRIDGELEADERBOARDS_SIMULATED", NoneAdapterKey },
             StorePlatformDefines.STORE_APPSTORE   => new[] { "UNITY_IOS_GAMECENTER", "UNIBRIDGELEADERBOARDS_SIMULATED", NoneAdapterKey },
             StorePlatformDefines.STORE_PLAYGAMA   => new[] { "UNIBRIDGE_PLAYGAMA", "UNIBRIDGELEADERBOARDS_SIMULATED", NoneAdapterKey },
+            StorePlatformDefines.STORE_YOUTUBE    => new[] { "UNIBRIDGE_YTPLAYABLES", "UNIBRIDGELEADERBOARDS_SIMULATED", NoneAdapterKey },
             StorePlatformDefines.STORE_EDITOR     => new[] { NoneAdapterKey },
             _                                     => new[] { "UNIBRIDGELEADERBOARDS_SIMULATED", NoneAdapterKey },
         };
@@ -121,6 +126,7 @@ namespace UniBridge.Editor
             StorePlatformDefines.STORE_RUSTORE    => new[] { "UNIBRIDGERATE_RUSTORE",    "UNIBRIDGERATE_MOCK", NoneAdapterKey },
             StorePlatformDefines.STORE_APPSTORE   => new[] { "UNITY_IOS_STOREREVIEW", NoneAdapterKey },
             StorePlatformDefines.STORE_PLAYGAMA   => new[] { "UNIBRIDGE_PLAYGAMA", "UNIBRIDGERATE_MOCK", NoneAdapterKey },
+            StorePlatformDefines.STORE_YOUTUBE    => new[] { NoneAdapterKey },
             StorePlatformDefines.STORE_EDITOR     => new[] { NoneAdapterKey },
             _                                     => new[] { "UNIBRIDGERATE_MOCK", NoneAdapterKey },
         };
@@ -131,6 +137,7 @@ namespace UniBridge.Editor
             StorePlatformDefines.STORE_RUSTORE    => new[] { "UNIBRIDGESHARE_ANDROID", "UNIBRIDGESHARE_MOCK", NoneAdapterKey },
             StorePlatformDefines.STORE_APPSTORE   => new[] { "UNIBRIDGESHARE_IOS",     "UNIBRIDGESHARE_MOCK", NoneAdapterKey },
             StorePlatformDefines.STORE_PLAYGAMA   => new[] { "UNIBRIDGE_PLAYGAMA",  "UNIBRIDGESHARE_MOCK", NoneAdapterKey },
+            StorePlatformDefines.STORE_YOUTUBE    => new[] { NoneAdapterKey },
             StorePlatformDefines.STORE_EDITOR     => new[] { "UNIBRIDGESHARE_MOCK",    NoneAdapterKey },
             _                                     => new[] { "UNIBRIDGESHARE_MOCK",    NoneAdapterKey },
         };
@@ -141,6 +148,7 @@ namespace UniBridge.Editor
             StorePlatformDefines.STORE_RUSTORE    => new[] { "UNIBRIDGESAVES_SIMULATED", NoneAdapterKey },
             StorePlatformDefines.STORE_APPSTORE   => new[] { "UNITY_IOS_ICLOUD",   "UNIBRIDGESAVES_SIMULATED", NoneAdapterKey },
             StorePlatformDefines.STORE_PLAYGAMA   => new[] { "UNIBRIDGE_PLAYGAMA",    "UNIBRIDGESAVES_SIMULATED", NoneAdapterKey },
+            StorePlatformDefines.STORE_YOUTUBE    => new[] { "UNIBRIDGE_YTPLAYABLES", "UNIBRIDGESAVES_SIMULATED", NoneAdapterKey },
             StorePlatformDefines.STORE_EDITOR     => new[] { "UNIBRIDGESAVES_SIMULATED", NoneAdapterKey },
             _                                     => new[] { "UNIBRIDGESAVES_SIMULATED", NoneAdapterKey },
         };
@@ -149,6 +157,7 @@ namespace UniBridge.Editor
         {
             StorePlatformDefines.STORE_EDITOR   => new[] { NoneAdapterKey },
             StorePlatformDefines.STORE_PLAYGAMA => new[] { NoneAdapterKey },
+            StorePlatformDefines.STORE_YOUTUBE  => new[] { NoneAdapterKey },
             _                                   => new[] { "UNIBRIDGEANALYTICS_APPMETRICA", NoneAdapterKey },
         };
 
@@ -158,6 +167,7 @@ namespace UniBridge.Editor
             StorePlatformDefines.STORE_RUSTORE    => new[] { "UNIBRIDGEAUTH_MOCK" },
             StorePlatformDefines.STORE_APPSTORE   => new[] { "UNITY_IOS_GAMECENTER", "UNIBRIDGEAUTH_MOCK" },
             StorePlatformDefines.STORE_PLAYGAMA   => new[] { "UNIBRIDGE_PLAYGAMA", "UNIBRIDGEAUTH_MOCK" },
+            StorePlatformDefines.STORE_YOUTUBE    => new[] { "UNIBRIDGEAUTH_MOCK" },
             StorePlatformDefines.STORE_EDITOR     => new[] { "UNIBRIDGEAUTH_MOCK" },
             _                                     => new[] { "UNIBRIDGEAUTH_MOCK" },
         };

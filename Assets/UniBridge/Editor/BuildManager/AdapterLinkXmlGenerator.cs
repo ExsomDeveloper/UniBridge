@@ -28,6 +28,7 @@ namespace UniBridge.Editor
             { "UNIBRIDGE_PLAYGAMA_SHARE",       "UniBridge.Share.Playgama" },
             { "UNIBRIDGE_PLAYGAMA_RATE",        "UniBridge.Rate.Playgama" },
             { "UNIBRIDGEANALYTICS_APPMETRICA",     "UniBridge.Analytics.AppMetrica" },
+            { "UNIBRIDGE_YTPLAYABLES",            "UniBridge.YouTubePlayables" },
         };
 
         public static void Generate()
@@ -140,6 +141,7 @@ namespace UniBridge.Editor
             if (defines.Contains(StorePlatformDefines.STORE_RUSTORE))    return StorePlatformDefines.STORE_RUSTORE;
             if (defines.Contains(StorePlatformDefines.STORE_APPSTORE))   return StorePlatformDefines.STORE_APPSTORE;
             if (defines.Contains(StorePlatformDefines.STORE_PLAYGAMA))   return StorePlatformDefines.STORE_PLAYGAMA;
+            if (defines.Contains(StorePlatformDefines.STORE_YOUTUBE))   return StorePlatformDefines.STORE_YOUTUBE;
             return StorePlatformDefines.STORE_EDITOR;
         }
 

@@ -66,6 +66,22 @@
             ]
         },
         {
+            "displayName": "YouTube Playables",
+            "define": "UNIBRIDGE_STORE_YOUTUBE",
+            "buildTarget": "WebGL",
+            "adsAdapter": "UNIBRIDGE_YTPLAYABLES",
+            "purchasesAdapter": "UNIBRIDGE_NONE",
+            "leaderboardsAdapter": "UNIBRIDGE_YTPLAYABLES",
+            "rateAdapter": "UNIBRIDGE_NONE",
+            "shareAdapter": "UNIBRIDGE_NONE",
+            "savesAdapter": "UNIBRIDGE_YTPLAYABLES",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNIBRIDGEAUTH_MOCK",
+            "sdkDefines": [
+                "UNIBRIDGE_YTPLAYABLES"
+            ]
+        },
+        {
             "displayName": "App Store",
             "define": "UNIBRIDGE_STORE_APPSTORE",
             "buildTarget": "iOS",

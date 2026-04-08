@@ -11,6 +11,7 @@ namespace UniBridge.Editor
         public const string STORE_RUSTORE    = "UNIBRIDGE_STORE_RUSTORE";
         public const string STORE_APPSTORE   = "UNIBRIDGE_STORE_APPSTORE";
         public const string STORE_PLAYGAMA   = "UNIBRIDGE_STORE_PLAYGAMA";
+        public const string STORE_YOUTUBE    = "UNIBRIDGE_STORE_YOUTUBE";
         public const string STORE_EDITOR     = "UNIBRIDGE_STORE_EDITOR";
 
         // ── Dynamic API (reads from StorePresetsManager) ──────────────────────

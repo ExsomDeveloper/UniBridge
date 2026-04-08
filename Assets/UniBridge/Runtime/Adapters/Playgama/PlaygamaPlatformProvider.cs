@@ -63,6 +63,7 @@ namespace UniBridge
                 PlatformMessage.GameplayStarted      => PlaygamaPlatformMessage.GameplayStarted,
                 PlatformMessage.GameplayStopped      => PlaygamaPlatformMessage.GameplayStopped,
                 PlatformMessage.PlayerGotAchievement => PlaygamaPlatformMessage.PlayerGotAchievement,
+                PlatformMessage.FirstFrameReady      => PlaygamaPlatformMessage.GameReady, // Playgama не различает firstFrame/gameReady
                 _                                    => throw new ArgumentOutOfRangeException(nameof(message), message, null)
             });
         }

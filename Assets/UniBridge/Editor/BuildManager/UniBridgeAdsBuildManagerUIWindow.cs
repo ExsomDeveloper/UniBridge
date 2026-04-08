@@ -858,6 +858,7 @@ namespace UniBridge.Editor
             if (sdkDefine == "UNIBRIDGESHARE_MOCK")             return true; // заглушка, всегда доступна
             if (sdkDefine == "UNIBRIDGESAVES_SIMULATED")        return true; // симуляция, всегда доступна
             if (sdkDefine == "UNITY_IOS_ICLOUD")          return true; // встроенный iOS, всегда доступен
+            if (sdkDefine == "UNIBRIDGE_YTPLAYABLES")     return true; // YouTube Playables SDK загружается через <script> tag, всегда доступен
             if (sdkDefine == "UNIBRIDGESAVES_GPGS")             return installedDefines.Contains("UNIBRIDGELEADERBOARDS_GPGS"); // требует GPGS
             return installedDefines.Contains(sdkDefine);
         }
