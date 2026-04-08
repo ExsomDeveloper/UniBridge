@@ -5,7 +5,8 @@
         "gitUrl": "",
         "define": "UNIBRIDGE_LEVELPLAY",
         "displayName": "LevelPlay",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "upm" }
     },
     "playgama": {
         "version": "1.27.0",
@@ -13,7 +14,8 @@
         "gitUrl": "https://github.com/playgama/bridge-unity.git#v1.27.0",
         "define": "UNIBRIDGE_PLAYGAMA",
         "displayName": "Playgama Bridge",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "github", "repo": "playgama/bridge-unity" }
     },
     "edm4u": {
         "version": "1.2.185",
@@ -21,7 +23,8 @@
         "gitUrl": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.185",
         "define": "",
         "displayName": "EDM4U",
-        "checkMode": "package"
+        "checkMode": "package",
+        "latestCheckSource": { "type": "github", "repo": "googlesamples/unity-jar-resolver" }
     },
     "yandex": {
         "version": "7.18.1",
@@ -31,7 +34,8 @@
         "displayName": "Yandex Mobile Ads",
         "checkMode": "define",
         "registryUrl": "https://package.openupm.com",
-        "registryScopes": "com.yandex;com.google"
+        "registryScopes": "com.yandex;com.google",
+        "latestCheckSource": { "type": "openupm" }
     },
     "unityiap": {
         "version": "4.12.2",
@@ -39,7 +43,8 @@
         "gitUrl": "",
         "define": "UNIBRIDGEPURCHASES_IAP",
         "displayName": "Unity IAP",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "upm" }
     },
     "rustore": {
         "version": "10.1.1",
@@ -49,7 +54,8 @@
         "coreUrl": "https://gitflic.ru/project/rustore/unity-rustore-pay-sdk/release/95b8ea3f-33e3-4def-9663-5d05b64cc915/2db3b359-e24f-4888-b7f3-013b8e79200f/download",
         "define": "UNIBRIDGEPURCHASES_RUSTORE",
         "displayName": "RuStore Pay",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "maven", "group": "ru.rustore.sdk", "artifact": "pay", "repoUrl": "https://artifactory-external.vkpartner.ru/artifactory/maven" }
     },
     "gpgs": {
         "version": "1.0.0",
@@ -57,7 +63,8 @@
         "gitUrl": "",
         "define": "UNIBRIDGELEADERBOARDS_GPGS",
         "displayName": "Google Play Games Services",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "upm" }
     },
     "googlePlayReview": {
         "version": "1.2.4",
@@ -67,7 +74,8 @@
         "displayName": "Google Play Review",
         "checkMode": "define",
         "registryUrl": "https://package.openupm.com",
-        "registryScopes": "com.google.play"
+        "registryScopes": "com.google.play",
+        "latestCheckSource": { "type": "openupm" }
     },
     "rustoreReview": {
         "version": "10.1.0",
@@ -77,7 +85,8 @@
         "coreUrl": "https://gitflic.ru/project/rustore/unity-rustore-pay-sdk/release/95b8ea3f-33e3-4def-9663-5d05b64cc915/2db3b359-e24f-4888-b7f3-013b8e79200f/download",
         "define": "UNIBRIDGERATE_RUSTORE",
         "displayName": "RuStore Review",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "maven", "group": "ru.rustore.sdk", "artifact": "review", "repoUrl": "https://artifactory-external.vkpartner.ru/artifactory/maven" }
     },
     "appmetrica": {
         "version": "6.8.0",
@@ -85,7 +94,8 @@
         "gitUrl": "https://github.com/appmetrica/appmetrica-unity-plugin.git#v6.8.0",
         "define": "UNIBRIDGEANALYTICS_APPMETRICA",
         "displayName": "AppMetrica",
-        "checkMode": "define"
+        "checkMode": "define",
+        "latestCheckSource": { "type": "github", "repo": "appmetrica/appmetrica-unity-plugin" }
     },
     "yandexMediationAdapters": [
         { "displayName": "Google AdMob",  "adapterKey": "google",      "version": "7.18.1", "detectionFile": "GoogleMobileadsMediationDependencies"  },

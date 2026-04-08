@@ -27,10 +27,31 @@ namespace UniBridge.Editor
             public string Define;           // e.g. UNIBRIDGE_LEVELPLAY
             public string RegistryUrl;      // scoped registry URL (e.g. OpenUPM), empty = not needed
             public string RegistryScopes;   // semicolon-separated scopes, e.g. "com.yandex;com.google"
+            public string SdkKey;           // key in SDKVersions.json (e.g. "levelplay", "playgama")
+            public string LatestVersion;    // latest upstream version from cache, null = unknown
 
             public bool IsInstalled => InstalledVersion != null;
             public bool NeedsUpdate => IsInstalled && InstalledVersion != RequiredVersion;
+            public bool HasNewerUpstream => !string.IsNullOrEmpty(LatestVersion) &&
+                                            LatestVersion != RequiredVersion &&
+                                            IsVersionNewer(LatestVersion, RequiredVersion);
             public string Source    => !string.IsNullOrEmpty(PackageId) ? PackageId : GitUrl;
+
+            private static bool IsVersionNewer(string a, string b)
+            {
+                if (string.IsNullOrEmpty(a) || string.IsNullOrEmpty(b)) return false;
+                var pa = a.Split('.');
+                var pb = b.Split('.');
+                int len = Math.Max(pa.Length, pb.Length);
+                for (int i = 0; i < len; i++)
+                {
+                    int va = i < pa.Length && int.TryParse(pa[i], out var x) ? x : 0;
+                    int vb = i < pb.Length && int.TryParse(pb[i], out var y) ? y : 0;
+                    if (va > vb) return true;
+                    if (va < vb) return false;
+                }
+                return false;
+            }
         }
 
         private class MediationEntry
@@ -78,6 +99,7 @@ namespace UniBridge.Editor
         private Label                 _detailDefine;
         private Label                 _detailRequired;
         private Label                 _detailInstalled;
+        private Label                 _detailLatest;
         private Label                 _statusLabel;
         private VisualElement         _sdkChecklistSection;
         private Button                _installBtn;
@@ -90,6 +112,7 @@ namespace UniBridge.Editor
         private static readonly Color ColorGreen  = new(0.25f, 0.80f, 0.25f);
         private static readonly Color ColorYellow = new(0.90f, 0.75f, 0.15f);
         private static readonly Color ColorGrey   = new(0.55f, 0.55f, 0.55f);
+        private static readonly Color ColorBlue   = new(0.40f, 0.65f, 0.95f);
         private static readonly Color ColorBorder = new(0.15f, 0.15f, 0.15f);
         private static readonly Color ColorBg     = new(0.18f, 0.18f, 0.18f);
         private static readonly Color ColorBgSel  = new(0.24f, 0.37f, 0.57f);
@@ -118,6 +141,7 @@ namespace UniBridge.Editor
             // After domain reload CreateGUI may not fire immediately.
             // Schedule a refresh as a safety net.
             EditorApplication.delayCall += EnsureRefreshed;
+            SDKUpdateChecker.OnCheckComplete += OnUpdateCheckComplete;
         }
 
         private void EnsureRefreshed()
@@ -135,9 +159,23 @@ namespace UniBridge.Editor
             EditorApplication.update -= OnListProgress;
             EditorApplication.update -= OnAddProgress;
             EditorApplication.update -= OnRemoveProgress;
+            SDKUpdateChecker.OnCheckComplete -= OnUpdateCheckComplete;
             _activeWebRequest?.Abort();
             _activeWebRequest?.Dispose();
             _activeWebRequest = null;
+        }
+
+        private void OnUpdateCheckComplete()
+        {
+            // Refresh latest versions from cache when background check finishes
+            var latestVersions = SDKUpdateChecker.GetAllLatestVersions();
+            foreach (var entry in _entries)
+            {
+                if (!string.IsNullOrEmpty(entry.SdkKey) && latestVersions.TryGetValue(entry.SdkKey, out var latest))
+                    entry.LatestVersion = latest;
+            }
+            foreach (var e in _entries) RefreshListItem(e);
+            RefreshDetailPanel();
         }
 
         // ── Data loading ─────────────────────────────────────────────────────
@@ -151,6 +189,7 @@ namespace UniBridge.Editor
             if (versions.levelplay != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "levelplay",
                     DisplayName     = !string.IsNullOrEmpty(versions.levelplay.displayName) ? versions.levelplay.displayName : "LevelPlay",
                     RequiredVersion = versions.levelplay.version,
                     PackageId       = versions.levelplay.packageId,
@@ -161,6 +200,7 @@ namespace UniBridge.Editor
             if (versions.playgama != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "playgama",
                     DisplayName     = !string.IsNullOrEmpty(versions.playgama.displayName) ? versions.playgama.displayName : "Playgama",
                     RequiredVersion = versions.playgama.version,
                     PackageId       = versions.playgama.packageId,
@@ -171,6 +211,7 @@ namespace UniBridge.Editor
             if (versions.edm4u != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "edm4u",
                     DisplayName     = !string.IsNullOrEmpty(versions.edm4u.displayName) ? versions.edm4u.displayName : "EDM4U",
                     RequiredVersion = versions.edm4u.version,
                     PackageId       = versions.edm4u.packageId,
@@ -181,6 +222,7 @@ namespace UniBridge.Editor
             if (versions.yandex != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "yandex",
                     DisplayName     = !string.IsNullOrEmpty(versions.yandex.displayName) ? versions.yandex.displayName : "Yandex Mobile Ads",
                     RequiredVersion = versions.yandex.version,
                     PackageId       = versions.yandex.packageId,
@@ -193,6 +235,7 @@ namespace UniBridge.Editor
             if (versions.unityiap != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "unityiap",
                     DisplayName     = !string.IsNullOrEmpty(versions.unityiap.displayName) ? versions.unityiap.displayName : "Unity IAP",
                     RequiredVersion = versions.unityiap.version,
                     PackageId       = versions.unityiap.packageId,
@@ -203,6 +246,7 @@ namespace UniBridge.Editor
             if (versions.rustore != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "rustore",
                     DisplayName     = !string.IsNullOrEmpty(versions.rustore.displayName) ? versions.rustore.displayName : "RuStore Pay",
                     RequiredVersion = versions.rustore.version,
                     PackageId       = versions.rustore.packageId,
@@ -215,6 +259,7 @@ namespace UniBridge.Editor
             if (versions.gpgs != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "gpgs",
                     DisplayName     = !string.IsNullOrEmpty(versions.gpgs.displayName) ? versions.gpgs.displayName : "Google Play Games Services",
                     RequiredVersion = versions.gpgs.version,
                     PackageId       = versions.gpgs.packageId,
@@ -225,6 +270,7 @@ namespace UniBridge.Editor
             if (versions.googlePlayReview != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "googlePlayReview",
                     DisplayName     = !string.IsNullOrEmpty(versions.googlePlayReview.displayName) ? versions.googlePlayReview.displayName : "Google Play Review",
                     RequiredVersion = versions.googlePlayReview.version,
                     PackageId       = versions.googlePlayReview.packageId,
@@ -237,6 +283,7 @@ namespace UniBridge.Editor
             if (versions.rustoreReview != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "rustoreReview",
                     DisplayName     = !string.IsNullOrEmpty(versions.rustoreReview.displayName) ? versions.rustoreReview.displayName : "RuStore Review",
                     RequiredVersion = versions.rustoreReview.version,
                     PackageId       = versions.rustoreReview.packageId,
@@ -249,12 +296,21 @@ namespace UniBridge.Editor
             if (versions.appmetrica != null)
                 _entries.Add(new SDKEntry
                 {
+                    SdkKey          = "appmetrica",
                     DisplayName     = !string.IsNullOrEmpty(versions.appmetrica.displayName) ? versions.appmetrica.displayName : "AppMetrica",
                     RequiredVersion = versions.appmetrica.version,
                     PackageId       = versions.appmetrica.packageId,
                     GitUrl          = versions.appmetrica.gitUrl,
                     Define          = versions.appmetrica.define ?? ""
                 });
+
+            // Populate latest upstream versions from cache
+            var latestVersions = SDKUpdateChecker.GetAllLatestVersions();
+            foreach (var entry in _entries)
+            {
+                if (!string.IsNullOrEmpty(entry.SdkKey) && latestVersions.TryGetValue(entry.SdkKey, out var latest))
+                    entry.LatestVersion = latest;
+            }
 
             _mediationEntries.Clear();
             if (versions.yandexMediationAdapters != null)
@@ -442,6 +498,7 @@ namespace UniBridge.Editor
             _detailPanel.Add(BuildInfoRow("Define:",    out _detailDefine));
             _detailPanel.Add(BuildInfoRow("Требуется:", out _detailRequired));
             _detailPanel.Add(BuildInfoRow("Установлен:", out _detailInstalled));
+            _detailPanel.Add(BuildInfoRow("Последняя:",  out _detailLatest));
 
             // Status label
             _statusLabel = new Label();
@@ -588,6 +645,18 @@ namespace UniBridge.Editor
                 _detailInstalled.style.color = new StyleColor(ColorGreen);
             }
 
+            // Latest upstream version
+            if (e.HasNewerUpstream)
+            {
+                _detailLatest.text        = $"v{e.LatestVersion}";
+                _detailLatest.style.color = new StyleColor(ColorBlue);
+                _detailLatest.parent.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                _detailLatest.parent.style.display = DisplayStyle.None;
+            }
+
             // SDK checklist
             _sdkChecklistSection.Clear();
             var sdkList = ChecklistRegistry.GetSdkChecklist(e.Define);
@@ -635,7 +704,9 @@ namespace UniBridge.Editor
             if (!entry.IsInstalled)
             {
                 dot.style.backgroundColor = new StyleColor(ColorGrey);
-                version.text  = "Не установлен";
+                version.text  = entry.HasNewerUpstream
+                    ? $"Не установлен  (v{entry.LatestVersion})"
+                    : "Не установлен";
                 version.style.color = new StyleColor(ColorGrey);
             }
             else if (entry.NeedsUpdate)
@@ -643,6 +714,12 @@ namespace UniBridge.Editor
                 dot.style.backgroundColor = new StyleColor(ColorYellow);
                 version.text  = $"v{entry.InstalledVersion}  ↑";
                 version.style.color = new StyleColor(ColorYellow);
+            }
+            else if (entry.HasNewerUpstream)
+            {
+                dot.style.backgroundColor = new StyleColor(ColorBlue);
+                version.text  = $"v{entry.InstalledVersion}  ↑ {entry.LatestVersion}";
+                version.style.color = new StyleColor(ColorBlue);
             }
             else
             {
@@ -1294,6 +1371,7 @@ namespace UniBridge.Editor
         public string checkMode;      // "define" or "package"
         public string registryUrl;    // scoped registry URL, empty = use Unity registry or git
         public string registryScopes; // semicolon-separated scopes
+        public LatestCheckSource latestCheckSource; // how to check for latest upstream version
     }
 
     [Serializable]
