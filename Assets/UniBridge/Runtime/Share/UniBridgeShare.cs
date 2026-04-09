@@ -78,6 +78,12 @@ namespace UniBridge
             var builder = new ShareSourceBuilder();
             _source = builder.Build(_config);
 
+            if (_source == null)
+            {
+                Debug.Log($"[{nameof(UniBridgeShare)}]: Share system disabled.");
+                return;
+            }
+
             _source.Initialize(
                 _config,
                 onSuccess: () =>
