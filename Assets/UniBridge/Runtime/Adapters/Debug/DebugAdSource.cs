@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 namespace UniBridge
 {
+    [Preserve]
     public class DebugAdSource : MonoBehaviour, IAdSource
     {
         [Header("Interstitial")]

@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -7,6 +8,7 @@ namespace UniBridge
     /// Stub for platforms without native sharing.
     /// IsSupported = false — allows hiding the share button in the UI.
     /// </summary>
+    [Preserve]
     public class MockShareSource : IShareSource
     {
         public bool IsInitialized { get; private set; }

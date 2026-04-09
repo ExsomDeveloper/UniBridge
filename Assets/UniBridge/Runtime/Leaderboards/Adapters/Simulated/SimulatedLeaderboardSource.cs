@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -16,6 +17,7 @@ namespace UniBridge
     ///   • 20 % chance to repeat growth once more
     ///   • 30 % chance to spawn a new bot at a random position
     /// </summary>
+    [Preserve]
     public class SimulatedLeaderboardSource : ILeaderboardSource
     {
         public bool   IsInitialized   { get; private set; }

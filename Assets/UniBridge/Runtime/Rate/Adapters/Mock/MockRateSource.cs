@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -7,6 +8,7 @@ namespace UniBridge
     /// Stub for platforms without a native rating request (e.g. Playgama).
     /// IsSupported = false — allows hiding the "Rate" button in the UI.
     /// </summary>
+    [Preserve]
     public class MockRateSource : IRateSource
     {
         public bool IsInitialized { get; private set; }

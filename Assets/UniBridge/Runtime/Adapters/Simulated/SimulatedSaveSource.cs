@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -8,6 +9,7 @@ namespace UniBridge
     /// Virtual key "UNIBRIDGESAVES_SIMULATED" — always available in Editor and Runtime.
     /// Use for testing cloud save behavior without a real platform SDK.
     /// </summary>
+    [Preserve]
     public class SimulatedSaveSource : ISaveSource
     {
         private const string KeyPrefix = "unibridge_saves_sim_";

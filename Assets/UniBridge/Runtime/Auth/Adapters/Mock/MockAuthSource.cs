@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -7,6 +8,7 @@ namespace UniBridge
     /// Stub for platforms without native authorization (e.g. RuStore).
     /// IsSupported = false — allows hiding UI elements that require authorization.
     /// </summary>
+    [Preserve]
     public class MockAuthSource : IAuthSource
     {
         public bool IsInitialized { get; private set; }

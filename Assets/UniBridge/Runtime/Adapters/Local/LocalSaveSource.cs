@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
+    [Preserve]
     public class LocalSaveSource : ISaveSource
     {
         private readonly string _savePath;

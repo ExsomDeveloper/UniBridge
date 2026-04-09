@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: UniBridgeShareConfig
   m_EditorClassIdentifier: 
   AutoInitialize: 1
-  PreferredShareAdapter: UNIBRIDGESHARE_MOCK
+  PreferredShareAdapter: UNIBRIDGE_NONE

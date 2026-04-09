@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
+    [Preserve]
     public class DebugPurchaseSource : IPurchaseSource
     {
         public bool IsInitialized { get; private set; }

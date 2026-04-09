@@ -17,13 +17,6 @@
       "dependencies": {},
       "hash": "8cf54b63e37dceaf1630135f9abddf08167500a1"
     },
-    "com.playgama.bridge": {
-      "version": "https://github.com/playgama/bridge-unity.git#v1.27.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "7d2eb62f9dac1a3bee728c552cc49478ad3579e4"
-    },
     "com.unity.2d.animation": {
       "version": "9.2.0",
       "depth": 1,
