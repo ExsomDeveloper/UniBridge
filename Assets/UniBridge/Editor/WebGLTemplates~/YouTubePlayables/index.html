@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>{{{ PRODUCT_NAME }}}</title>
+        <style>
+            html, body {
+                width: 100%;
+                height: 100%;
+                padding: 0;
+                margin: 0;
+                overflow: hidden;
+                background: #000;
+            }
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #canvas {
+                background: #000;
+                width: 100%;
+                height: 100%;
+                display: block;
+            }
+        </style>
+        <script src="https://www.youtube.com/game_api/v1"></script>
+    </head>
+    <body>
+        <canvas id="canvas"></canvas>
+        <script>
+            // ── Настройки портретного режима ────────────────────────────
+            // Включите pillarbox (полосы по бокам) для portrait-игр в ландшафтной ориентации
+            var PORTRAIT_MODE   = false;         // true — включить полосы по бокам
+            var PORTRAIT_RATIO  = 9 / 16;        // Соотношение сторон (ширина / высота)
+            var PILLARBOX_COLOR = '#000000';      // CSS-цвет полос по бокам
+            // ────────────────────────────────────────────────────────────
+
+            if (PORTRAIT_MODE) {
+                function applyPillarbox() {
+                    var viewRatio = window.innerWidth / window.innerHeight;
+                    var c = document.getElementById('canvas');
+                    if (viewRatio > PORTRAIT_RATIO) {
+                        c.style.maxWidth = (window.innerHeight * PORTRAIT_RATIO) + 'px';
+                        document.body.style.background = PILLARBOX_COLOR;
+                    } else {
+                        c.style.maxWidth = '';
+                        document.body.style.background = '#000';
+                    }
+                }
+                applyPillarbox();
+                window.addEventListener('resize', applyPillarbox);
+            }
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                var meta = document.createElement('meta');
+                meta.name = 'viewport';
+                meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+                document.getElementsByTagName('head')[0].appendChild(meta);
+            }
+
+            var canvas = document.getElementById('canvas');
+
+            // Signal first frame as soon as canvas is visible (removes YouTube loading spinner)
+            if (typeof ytgame !== 'undefined' && ytgame.game) {
+                ytgame.game.firstFrameReady();
+            }
+
+            var loaderScript = document.createElement('script');
+            loaderScript.src = 'Build/{{{ LOADER_FILENAME }}}';
+            loaderScript.onload = function () {
+                createUnityInstance(canvas, {
+                    dataUrl: 'Build/{{{ DATA_FILENAME }}}',
+                    frameworkUrl: 'Build/{{{ FRAMEWORK_FILENAME }}}',
+                    codeUrl: 'Build/{{{ CODE_FILENAME }}}',
+#if MEMORY_FILENAME
+                    memoryUrl: 'Build/{{{ MEMORY_FILENAME }}}',
+#endif
+#if SYMBOLS_FILENAME
+                    symbolsUrl: 'Build/{{{ SYMBOLS_FILENAME }}}',
+#endif
+                    streamingAssetsUrl: 'StreamingAssets',
+                    companyName: '{{{ COMPANY_NAME }}}',
+                    productName: '{{{ PRODUCT_NAME }}}',
+                    productVersion: '{{{ PRODUCT_VERSION }}}',
+                }).then(function (instance) {
+                    window.unityInstance = instance;
+                    canvas.focus();
+                }).catch(function (err) {
+                    console.error('Unity load failed:', err);
+                    if (typeof ytgame !== 'undefined' && ytgame.health) {
+                        ytgame.health.logError();
+                    }
+                });
+            };
+            document.body.appendChild(loaderScript);
+
+            window.addEventListener('pointerdown', function () {
+                window.focus();
+                canvas.focus();
+            });
+        </script>
+    </body>
+</html>

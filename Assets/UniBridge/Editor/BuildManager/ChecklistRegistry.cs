@@ -16,6 +16,7 @@ namespace UniBridge.Editor
             {
                 { "UNIBRIDGEPURCHASES_RUSTORE",       new RuStoreBillingChecklist() },
                 { "UNIBRIDGE_PLAYGAMA",            new PlaygamaChecklist() },
+                { "UNIBRIDGE_YTPLAYABLES",         new YouTubePlayablesChecklist() },
                 { "UNIBRIDGEANALYTICS_APPMETRICA",    new AppMetricaChecklist() },
             };
 

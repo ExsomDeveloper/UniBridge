@@ -648,6 +648,9 @@ namespace UniBridge.Editor
 
             StoreAndroidConfigurator.OnStoreChanged(previousDefine, _selected.define, wantShareEnabled);
 
+            if (_selected.define == StorePlatformDefines.STORE_YOUTUBE)
+                YouTubePlayablesTemplateInstaller.EnsureInstalled();
+
             if (!isEditorOnly && EditorUserBuildSettings.activeBuildTarget != target)
                 EditorUserBuildSettings.SwitchActiveBuildTarget(targetGroup, target);
 
@@ -736,6 +739,16 @@ namespace UniBridge.Editor
                     {
                         _checklistItemsContainer.Add(ChecklistUIHelper.BuildGroup(sdkList.Title, sdkList.GetItems()));
                         hasAny = true;
+
+                        if (sdk == "UNIBRIDGE_YTPLAYABLES")
+                        {
+                            var btn = new Button(() => YouTubePlayablesTemplateWindow.Open())
+                                { text = "Настроить шаблон" };
+                            btn.style.marginLeft = 14;
+                            btn.style.marginTop = 4;
+                            btn.style.marginBottom = 4;
+                            _checklistItemsContainer.Add(btn);
+                        }
                     }
                 }
             }
