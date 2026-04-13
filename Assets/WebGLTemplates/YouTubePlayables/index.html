@@ -61,11 +61,6 @@
 
             var canvas = document.getElementById('canvas');
 
-            // Signal first frame as soon as canvas is visible (removes YouTube loading spinner)
-            if (typeof ytgame !== 'undefined' && ytgame.game) {
-                ytgame.game.firstFrameReady();
-            }
-
             var loaderScript = document.createElement('script');
             loaderScript.src = 'Build/{{{ LOADER_FILENAME }}}';
             loaderScript.onload = function () {
@@ -83,6 +78,8 @@
                     companyName: '{{{ COMPANY_NAME }}}',
                     productName: '{{{ PRODUCT_NAME }}}',
                     productVersion: '{{{ PRODUCT_VERSION }}}',
+                    // Keep keyboard capture on canvas only — prevents Unity from calling preventDefault on document-level keys (YouTube Playables MUST).
+                    keyboardListeningElement: canvas,
                 }).then(function (instance) {
                     window.unityInstance = instance;
                     canvas.focus();
@@ -99,6 +96,14 @@
                 window.focus();
                 canvas.focus();
             });
+
+            // YouTube Playables MUST: do NOT call preventDefault() on Esc.
+            // Safari fullscreen uses Esc to exit; blocking it traps the user in fullscreen.
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape' && e.defaultPrevented) {
+                    console.warn('[UniBridge] Esc preventDefault detected — violates YouTube Playables spec (Safari fullscreen will break).');
+                }
+            }, true);
         </script>
     </body>
 </html>

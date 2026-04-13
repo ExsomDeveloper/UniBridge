@@ -6,7 +6,6 @@ YouTube Playables — WebGL Template
 
 Что делает шаблон:
   - Загружает YouTube Playables SDK (ytgame) до игрового кода
-  - Вызывает ytgame.game.firstFrameReady() сразу после появления canvas
   - Загружает Unity WebGL билд через стандартный createUnityInstance()
   - Поддерживает portrait-режим с pillarbox (полосы по бокам)
 
@@ -57,3 +56,20 @@ YouTube Playables — WebGL Template
   - JS heap: < 512 MB
   - Игра ОБЯЗАНА поддерживать touch и mouse input
   - Игра НЕ ДОЛЖНА содержать внешних ссылок, IAP, внешней рекламы
+
+
+Клавиатура (сертификация YouTube Playables)
+-------------------------------------------
+
+  MUST: НЕ вызывать event.preventDefault() на клавише Escape.
+  Причина: в Safari fullscreen Esc используется для выхода из полного экрана;
+           preventDefault блокирует выход, игра «залипает» в fullscreen.
+
+  SHOULD: по Esc закрывать открытые модалки/диалоги (UX).
+
+  В шаблоне нет ни одного preventDefault. Если вы добавляете свои
+  keydown/keyup-обработчики (в Unity C# коде или в index.html) —
+  не вызывайте preventDefault на Escape (e.key === 'Escape' / e.keyCode === 27).
+
+  Шаблон выставляет keyboardListeningElement: canvas в createUnityInstance(),
+  чтобы Unity не перехватывал клавиши на уровне document.

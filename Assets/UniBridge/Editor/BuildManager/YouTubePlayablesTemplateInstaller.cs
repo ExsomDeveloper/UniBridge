@@ -40,6 +40,11 @@ namespace UniBridge.Editor
 
             AssetDatabase.Refresh();
             Debug.Log("[UniBridge] YouTube Playables WebGL template installed in Assets/WebGLTemplates/YouTubePlayables/");
+
+            EditorUtility.DisplayDialog("UniBridge",
+                "WebGL-шаблон YouTubePlayables установлен.\n\n" +
+                "Перезапустите Unity, чтобы шаблон появился в Player Settings > WebGL > Resolution and Presentation.",
+                "OK");
         }
 
         private static string FindSourceDir()

@@ -115,6 +115,7 @@ namespace UniBridge
         /// </summary>
         public static void SendMessage(PlatformMessage message)
         {
+            UnityEngine.Debug.Log($"[{nameof(UniBridgeEnvironment)}] SendMessage: {message} (provider: {_provider?.GetType().Name ?? "none"})");
             _provider?.SendMessage(message);
         }
 
