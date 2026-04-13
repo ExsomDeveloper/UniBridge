@@ -6,7 +6,7 @@ namespace UniBridge
     {
         public IPurchaseSource Build(UniBridgePurchasesConfig config)
         {
-            if (config != null && config.PreferredPurchaseAdapter == "UNIBRIDGE_NONE") return null;
+            if (config != null && config.PreferredPurchaseAdapter == UniBridgeAdapterKeys.None) return null;
 
 #if UNITY_EDITOR
             return new DebugPurchaseSource();

@@ -8,7 +8,7 @@ namespace UniBridge
         public static bool   IsInitialized { get; private set; }
         public static bool   IsSupported   => _source?.IsSupported  ?? false;
         public static bool   IsAuthorized  => _source?.IsAuthorized ?? false;
-        public static string AdapterName   => _source?.GetType().Name ?? "None";
+        public static string AdapterName   => _source?.GetType().Name ?? UniBridgeAdapterKeys.None;
 
         public static event Action OnInitSuccess;
         public static event Action OnInitFailed;

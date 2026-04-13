@@ -10,7 +10,7 @@ namespace UniBridge
         public static bool   IsSupported     => _source?.IsSupported ?? false;
         public static LeaderboardDisplayMode DisplayMode => _source?.DisplayMode ?? LeaderboardDisplayMode.NotSupported;
         public static bool   IsAuthenticated => _source?.IsAuthenticated ?? false;
-        public static string AdapterName     => _source?.GetType().Name ?? "None";
+        public static string AdapterName     => _source?.GetType().Name ?? UniBridgeAdapterKeys.None;
         public static string LocalPlayerName => _source?.LocalPlayerName ?? string.Empty;
 
         public static event Action OnInitSuccess;

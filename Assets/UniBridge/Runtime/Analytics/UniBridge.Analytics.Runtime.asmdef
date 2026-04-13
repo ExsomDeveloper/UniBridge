@@ -2,7 +2,8 @@
     "name": "UniBridge.Analytics.Runtime",
     "rootNamespace": "UniBridge",
     "references": [
-        "UniBridge.Purchases.Runtime"
+        "UniBridge.Purchases.Runtime",
+        "UniBridge.Core.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

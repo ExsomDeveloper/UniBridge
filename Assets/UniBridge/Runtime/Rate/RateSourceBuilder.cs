@@ -6,7 +6,7 @@ namespace UniBridge
     {
         public IRateSource Build(UniBridgeRateConfig config)
         {
-            if (config != null && config.PreferredRateAdapter == "UNIBRIDGE_NONE") return null;
+            if (config != null && config.PreferredRateAdapter == UniBridgeAdapterKeys.None) return null;
 
 #if UNITY_EDITOR
             return new DebugRateSource();

@@ -1,7 +1,9 @@
 {
     "name": "UniBridge.Share.Runtime",
     "rootNamespace": "UniBridge",
-    "references": [],
+    "references": [
+        "UniBridge.Core.Runtime"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

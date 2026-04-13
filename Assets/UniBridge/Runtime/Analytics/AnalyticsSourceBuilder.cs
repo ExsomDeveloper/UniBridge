@@ -6,7 +6,7 @@ namespace UniBridge
     {
         public IAnalyticsSource Build(UniBridgeAnalyticsConfig config)
         {
-            if (config != null && config.PreferredAnalyticsAdapter == "UNIBRIDGE_NONE") return null;
+            if (config != null && config.PreferredAnalyticsAdapter == UniBridgeAdapterKeys.None) return null;
 
 #if UNITY_EDITOR
             return new DebugAnalyticsSource();

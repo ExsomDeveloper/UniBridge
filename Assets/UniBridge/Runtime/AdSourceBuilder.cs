@@ -6,7 +6,7 @@ namespace UniBridge
     {
         public IAdSource Build(UniBridgeConfig config, bool youngMode = true, Transform root = null)
         {
-            if (config != null && config.PreferredAdsAdapter == "UNIBRIDGE_NONE") return null;
+            if (config != null && config.PreferredAdsAdapter == UniBridgeAdapterKeys.None) return null;
 
             if (root == null)
                 root = new GameObject("AdSource").transform;

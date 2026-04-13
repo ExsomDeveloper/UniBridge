@@ -1,8 +1,9 @@
 using UnityEngine;
+using UniBridgeAdsFacade = global::UniBridge.UniBridge;
 
 namespace UniBridge
 {
-    public enum UniBridgeSystemCheck { None, Share, Leaderboards, Purchases, Rate }
+    public enum UniBridgeSystemCheck { None, Share, Leaderboards, Purchases, Rate, Auth, Ads }
 
     public class DisableIfNotSupported : MonoBehaviour
     {
@@ -13,7 +14,10 @@ namespace UniBridge
 
         private void Awake()
         {
-            if (_system == UniBridgeSystemCheck.None || IsInitialized() || AdapterName() != "None")
+            // AdapterName == UniBridgeAdapterKeys.None means the facade's _source is null
+            // (PreferredXxxAdapter == UNIBRIDGE_NONE or no adapter registered). In that case
+            // OnInitSuccess/OnInitFailed will never fire — decide now.
+            if (_system == UniBridgeSystemCheck.None || IsInitialized() || AdapterName() == UniBridgeAdapterKeys.None)
             {
                 ApplyVisibility();
             }
@@ -62,6 +66,8 @@ namespace UniBridge
             UniBridgeSystemCheck.Leaderboards => UniBridgeLeaderboards.IsInitialized,
             UniBridgeSystemCheck.Purchases    => UniBridgePurchases.IsInitialized,
             UniBridgeSystemCheck.Rate         => UniBridgeRate.IsInitialized,
+            UniBridgeSystemCheck.Auth         => UniBridgeAuth.IsInitialized,
+            UniBridgeSystemCheck.Ads          => UniBridgeAdsFacade.IsInitialized,
             _                           => false
         };
 
@@ -71,7 +77,9 @@ namespace UniBridge
             UniBridgeSystemCheck.Leaderboards => UniBridgeLeaderboards.AdapterName,
             UniBridgeSystemCheck.Purchases    => UniBridgePurchases.AdapterName,
             UniBridgeSystemCheck.Rate         => UniBridgeRate.AdapterName,
-            _                           => "None"
+            UniBridgeSystemCheck.Auth         => UniBridgeAuth.AdapterName,
+            UniBridgeSystemCheck.Ads          => UniBridgeAdsFacade.AdapterName,
+            _                           => UniBridgeAdapterKeys.None
         };
 
         private bool IsSupported() => _system switch
@@ -81,6 +89,8 @@ namespace UniBridge
             UniBridgeSystemCheck.Leaderboards => UniBridgeLeaderboards.IsSupported,
             UniBridgeSystemCheck.Purchases    => UniBridgePurchases.IsSupported,
             UniBridgeSystemCheck.Rate         => UniBridgeRate.IsSupported,
+            UniBridgeSystemCheck.Auth         => UniBridgeAuth.IsSupported,
+            UniBridgeSystemCheck.Ads          => UniBridgeAdsFacade.IsSupported,
             _                           => false
         };
 
@@ -104,6 +114,14 @@ namespace UniBridge
                     UniBridgeRate.OnInitSuccess += handler;
                     UniBridgeRate.OnInitFailed  += handler;
                     break;
+                case UniBridgeSystemCheck.Auth:
+                    UniBridgeAuth.OnInitSuccess += handler;
+                    UniBridgeAuth.OnInitFailed  += handler;
+                    break;
+                case UniBridgeSystemCheck.Ads:
+                    UniBridgeAdsFacade.OnInitSuccess += handler;
+                    UniBridgeAdsFacade.OnInitFailed  += handler;
+                    break;
             }
         }
 
@@ -126,6 +144,14 @@ namespace UniBridge
                 case UniBridgeSystemCheck.Rate:
                     UniBridgeRate.OnInitSuccess -= handler;
                     UniBridgeRate.OnInitFailed  -= handler;
+                    break;
+                case UniBridgeSystemCheck.Auth:
+                    UniBridgeAuth.OnInitSuccess -= handler;
+                    UniBridgeAuth.OnInitFailed  -= handler;
+                    break;
+                case UniBridgeSystemCheck.Ads:
+                    UniBridgeAdsFacade.OnInitSuccess -= handler;
+                    UniBridgeAdsFacade.OnInitFailed  -= handler;
                     break;
             }
         }

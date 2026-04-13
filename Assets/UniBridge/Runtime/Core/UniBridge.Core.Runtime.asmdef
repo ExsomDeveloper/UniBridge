@@ -1,9 +1,7 @@
 {
-    "name": "UniBridge.Leaderboards.Runtime",
+    "name": "UniBridge.Core.Runtime",
     "rootNamespace": "UniBridge",
-    "references": [
-        "UniBridge.Core.Runtime"
-    ],
+    "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,

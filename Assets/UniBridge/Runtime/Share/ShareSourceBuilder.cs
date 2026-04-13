@@ -6,11 +6,12 @@ namespace UniBridge
     {
         public IShareSource Build(UniBridgeShareConfig config)
         {
+            if (config != null && config.PreferredShareAdapter == UniBridgeAdapterKeys.None)
+                return null;
+
 #if UNITY_EDITOR
             return new DebugShareSource();
 #else
-            if (config != null && config.PreferredShareAdapter == "UNIBRIDGE_NONE")
-                return null;
 
             if (config != null && config.PreferredShareAdapter == "UNIBRIDGESHARE_MOCK")
             {

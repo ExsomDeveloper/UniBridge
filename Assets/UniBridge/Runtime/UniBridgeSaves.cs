@@ -7,7 +7,7 @@ namespace UniBridge
     public static class UniBridgeSaves
     {
         public static bool IsInitialized { get; private set; }
-        public static string AdapterName => _source?.GetType().Name ?? "None";
+        public static string AdapterName => _source?.GetType().Name ?? UniBridgeAdapterKeys.None;
 
         private static ISaveSource _source;
 

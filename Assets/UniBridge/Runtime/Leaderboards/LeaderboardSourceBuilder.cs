@@ -6,7 +6,7 @@ namespace UniBridge
     {
         public ILeaderboardSource Build(UniBridgeLeaderboardsConfig config)
         {
-            if (config != null && config.PreferredLeaderboardAdapter == "UNIBRIDGE_NONE") return null;
+            if (config != null && config.PreferredLeaderboardAdapter == UniBridgeAdapterKeys.None) return null;
 
 #if UNITY_EDITOR
             if (config != null && !string.IsNullOrEmpty(config.PreferredLeaderboardAdapter))

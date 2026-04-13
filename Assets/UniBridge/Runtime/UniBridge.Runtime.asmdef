@@ -3,10 +3,12 @@
   "rootNamespace": "UniBridge",
   "references": [
     "Newtonsoft.Json",
+    "UniBridge.Core.Runtime",
     "UniBridge.Leaderboards.Runtime",
     "UniBridge.Purchases.Runtime",
     "UniBridge.Rate.Runtime",
-    "UniBridge.Share.Runtime"
+    "UniBridge.Share.Runtime",
+    "UniBridge.Auth.Runtime"
   ],
   "includePlatforms": [],
   "excludePlatforms": [],

@@ -7,7 +7,8 @@ namespace UniBridge
     public class UniBridge : MonoBehaviour
     {
         public static bool IsInitialized { get; private set; }
-        public static string AdapterName => _adSource?.GetType().Name ?? "None";
+        public static bool IsSupported => _adSource != null;
+        public static string AdapterName => _adSource?.GetType().Name ?? UniBridgeAdapterKeys.None;
         public static event Action OnInitSuccess;
         public static event Action OnInitFailed;
         public static event Action OnInterstitialClosed;

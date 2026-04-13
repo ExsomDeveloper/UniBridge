@@ -22,7 +22,7 @@ namespace UniBridge
                 return new iCloudSaveSource();
 #endif
 
-            if (preferred == "UNIBRIDGE_NONE" || preferred == "")
+            if (preferred == UniBridgeAdapterKeys.None || preferred == "")
                 return new LocalSaveSource();
 
             if (!string.IsNullOrEmpty(preferred) && SaveSourceRegistry.HasFactory(preferred))
