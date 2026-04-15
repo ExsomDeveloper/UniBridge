@@ -14,7 +14,10 @@ namespace UniBridge
     /// </summary>
     public class YouTubePlayablesLeaderboardSource : ILeaderboardSource
     {
-        [DllImport("__Internal")] private static extern void YTPlayables_SendScore(int score, Action<int> onSuccess, Action<int> onFail);
+        [DllImport("__Internal")] private static extern void YTPlayables_SendScore(double score, Action<int> onSuccess, Action<int> onFail);
+
+        // ytgame.engagement.sendScore requires value <= Number.MAX_SAFE_INTEGER (2^53 - 1).
+        private const long MaxSafeInteger = 9007199254740991L;
         [DllImport("__Internal")] private static extern int  YTPlayables_InPlayablesEnv();
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
@@ -53,10 +56,9 @@ namespace UniBridge
                 return;
             }
 
-            // YouTube sendScore takes an integer; clamp to int range
-            int intScore = score > int.MaxValue ? int.MaxValue : (int)score;
+            long clamped = score > MaxSafeInteger ? MaxSafeInteger : (score < 0 ? 0 : score);
             _submitCallback = onComplete;
-            YTPlayables_SendScore(intScore, OnSubmitSuccess, OnSubmitFail);
+            YTPlayables_SendScore((double)clamped, OnSubmitSuccess, OnSubmitFail);
         }
 
         [MonoPInvokeCallback(typeof(Action<int>))]

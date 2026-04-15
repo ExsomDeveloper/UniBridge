@@ -8,9 +8,16 @@ namespace UniBridge
 {
     internal static class YouTubePlayablesPlatformProvider
     {
+        [DllImport("__Internal")] private static extern int YTPlayables_InPlayablesEnv();
+
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void Register()
         {
+            if (YTPlayables_InPlayablesEnv() != 1)
+            {
+                Debug.Log($"[{nameof(YouTubePlayablesPlatformProvider)}] Not in Playables env, skipping provider registration");
+                return;
+            }
             UniBridgeEnvironment.SetProvider(new YouTubePlayablesPlatformParamsProvider(), "YouTubePlayables");
         }
     }
@@ -19,7 +26,8 @@ namespace UniBridge
     {
         [DllImport("__Internal")] private static extern int    YTPlayables_InPlayablesEnv();
         [DllImport("__Internal")] private static extern int    YTPlayables_IsAudioEnabled();
-        [DllImport("__Internal")] private static extern string YTPlayables_GetLanguage();
+        [DllImport("__Internal")] private static extern IntPtr YTPlayables_GetLanguage();
+        [DllImport("__Internal")] private static extern void   YTPlayables_FreeString(IntPtr ptr);
         [DllImport("__Internal")] private static extern void   YTPlayables_FetchLanguage(Action<string> callback);
         [DllImport("__Internal")] private static extern void   YTPlayables_RegisterAudioCallback(Action<int> callback);
         [DllImport("__Internal")] private static extern void   YTPlayables_RegisterPauseCallback(Action<int> callback);
@@ -33,13 +41,22 @@ namespace UniBridge
 
         public string GetPlatformId() => YTPlayables_InPlayablesEnv() == 1 ? "youtube" : "";
 
+        /// <summary>
+        /// Returns the full BCP-47 language tag reported by YouTube (e.g. "en-US", "es-419", "zh-Hans").
+        /// Returns "en" fallback until the async YTPlayables_FetchLanguage resolves on first frames.
+        /// </summary>
         public string GetLanguage()
         {
-            var lang = YTPlayables_GetLanguage();
-            // BCP-47 tag (e.g. "en-US") → extract primary language subtag
-            if (!string.IsNullOrEmpty(lang) && lang.Contains("-"))
-                return lang.Substring(0, lang.IndexOf('-'));
-            return lang ?? "en";
+            var ptr = YTPlayables_GetLanguage();
+            try
+            {
+                var lang = Marshal.PtrToStringUTF8(ptr);
+                return string.IsNullOrEmpty(lang) ? "en" : lang;
+            }
+            finally
+            {
+                if (ptr != IntPtr.Zero) YTPlayables_FreeString(ptr);
+            }
         }
 
         public bool IsAudioEnabled => YTPlayables_IsAudioEnabled() == 1;

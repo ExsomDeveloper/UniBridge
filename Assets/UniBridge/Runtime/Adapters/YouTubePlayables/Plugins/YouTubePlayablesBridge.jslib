@@ -30,11 +30,16 @@ mergeInto(LibraryManager.library, {
     YTPlayables_GetLanguage: function () {
         // getLanguage() returns a Promise — we cache the result and return it synchronously.
         // The actual async fetch is done in YTPlayables_FetchLanguage.
+        // Caller MUST pass the returned pointer to YTPlayables_FreeString after reading.
         var lang = Module._ytplayables_language || 'en';
         var bufferSize = lengthBytesUTF8(lang) + 1;
         var buffer = _malloc(bufferSize);
         stringToUTF8(lang, buffer, bufferSize);
         return buffer;
+    },
+
+    YTPlayables_FreeString: function (ptr) {
+        if (ptr) _free(ptr);
     },
 
     YTPlayables_FetchLanguage: function (callbackPtr) {
@@ -103,9 +108,22 @@ mergeInto(LibraryManager.library, {
             return;
         }
         var data = UTF8ToString(dataPtr);
+        // Spec: saveData payload must be well-formed UTF-16, max 3 MiB.
+        var MAX_BYTES = 3 * 1024 * 1024;
+        if (typeof data.isWellFormed === 'function' && !data.isWellFormed()) {
+            console.error('[YTPlayables][jslib] saveData rejected: malformed UTF-16 (lone surrogate)');
+            {{{ makeDynCall('vi', 'callbackFailPtr') }}}(0);
+            return;
+        }
+        if (lengthBytesUTF8(data) > MAX_BYTES) {
+            console.error('[YTPlayables][jslib] saveData rejected: payload exceeds 3 MiB limit');
+            {{{ makeDynCall('vi', 'callbackFailPtr') }}}(0);
+            return;
+        }
         ytgame.game.saveData(data).then(function () {
             {{{ makeDynCall('vi', 'callbackSuccessPtr') }}}(1);
-        }).catch(function () {
+        }).catch(function (e) {
+            console.warn('[YTPlayables][jslib] saveData failed:', e);
             {{{ makeDynCall('vi', 'callbackFailPtr') }}}(0);
         });
     },

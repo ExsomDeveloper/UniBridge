@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -24,29 +25,42 @@ namespace UniBridge
             Debug.Log("[UniBridgeSaves] YouTube Playables save adapter registered");
         }
 
-        [Serializable]
+        [Serializable, Preserve]
         private class SaveBlobData
         {
-            public List<SaveEntry> entries = new();
+            [Preserve] public List<SaveEntry> entries = new();
         }
 
-        [Serializable]
+        [Serializable, Preserve]
         private class SaveEntry
         {
-            public string k;
-            public string v;
+            [Preserve] public string k;
+            [Preserve] public string v;
         }
+
+        private const int MaxLoadRetries = 3;
 
         private static YouTubePlayablesSaveSource _instance;
         private Dictionary<string, string> _cache;
         private bool _loaded;
         private bool _loading;
+        private int _loadRetryCount;
         private readonly List<Action> _pendingOps = new();
 
         public YouTubePlayablesSaveSource()
         {
             _instance = this;
+            UniBridgeEnvironment.PauseStateChanged += OnPauseStateChanged;
             LoadBlob();
+        }
+
+        // Spec: onPause gives the game "a short window to save any state before it is evicted".
+        // Force-flush current cache so the latest data reaches YouTube before the page is suspended.
+        private void OnPauseStateChanged(bool paused)
+        {
+            if (!paused || !_loaded || _flushing || _cache == null) return;
+            Debug.Log($"[{nameof(YouTubePlayablesSaveSource)}] Pause received — forcing flush");
+            DoFlush();
         }
 
         public void Save(string key, string json, Action<bool> onComplete)
@@ -116,11 +130,12 @@ namespace UniBridge
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogWarning($"[YouTubePlayablesSaveSource] Failed to parse save blob: {ex.Message}");
+                    Debug.LogWarning($"[{nameof(YouTubePlayablesSaveSource)}] Failed to parse save blob: {ex.Message}");
                 }
             }
-            self._loaded  = true;
-            self._loading = false;
+            self._loaded       = true;
+            self._loading      = false;
+            self._loadRetryCount = 0;
             self.DrainPending();
         }
 
@@ -129,11 +144,34 @@ namespace UniBridge
         {
             var self = _instance;
             if (self == null) return;
-            Debug.LogWarning("[YouTubePlayablesSaveSource] loadData failed, starting with empty cache");
-            self._cache   = new Dictionary<string, string>();
-            self._loaded  = true;
             self._loading = false;
-            self.DrainPending();
+
+            if (self._loadRetryCount < MaxLoadRetries)
+            {
+                float delay = 1f * (1 << self._loadRetryCount); // 1s, 2s, 4s
+                self._loadRetryCount++;
+                Debug.LogWarning($"[{nameof(YouTubePlayablesSaveSource)}] loadData failed, retry {self._loadRetryCount}/{MaxLoadRetries} in {delay}s");
+                RetryHelper.InvokeAfter(delay, () =>
+                {
+                    if (_instance != null && !_instance._loaded && !_instance._loading)
+                        _instance.LoadBlob();
+                });
+                return;
+            }
+
+            // All retries exhausted — do NOT allow writes (would overwrite cloud data).
+            // Fail pending ops so callers don't hang, but keep _loaded = false.
+            Debug.LogError($"[{nameof(YouTubePlayablesSaveSource)}] loadData failed after {MaxLoadRetries} retries; saves disabled until next successful load");
+            self.FailPending();
+        }
+
+        private void FailPending()
+        {
+            // Cannot safely run the ops because they would write to the cloud.
+            // Drop the queue — callers that passed callbacks will simply not receive them for this attempt.
+            // Future Save/Load/Delete/HasKey calls will re-trigger LoadBlob via EnsureLoaded.
+            _pendingOps.Clear();
+            _loadRetryCount = 0;
         }
 
         private void DrainPending()
