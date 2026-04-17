@@ -1,0 +1,32 @@
+{
+    "name": "UniBridge.Async.Runtime",
+    "rootNamespace": "UniBridge.Async",
+    "references": [
+        "UniBridge.Runtime",
+        "UniBridge.Core.Runtime",
+        "UniBridge.Purchases.Runtime",
+        "UniBridge.Leaderboards.Runtime",
+        "UniBridge.Rate.Runtime",
+        "UniBridge.Share.Runtime",
+        "UniBridge.Analytics.Runtime",
+        "UniBridge.Auth.Runtime",
+        "UniTask"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+        "UNIBRIDGE_UNITASK"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.cysharp.unitask",
+            "expression": "2.0.0",
+            "define": "UNIBRIDGE_UNITASK"
+        }
+    ],
+    "noEngineReferences": false
+}

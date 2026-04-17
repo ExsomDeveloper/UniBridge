@@ -153,6 +153,8 @@ Adapter registration is gated by `#if` defines, so only the correct adapters for
 
 **Editor asmdefs**: `UniBridge.Editor`, `UniBridge.Analytics.Editor`, `UniBridge.Auth.Editor`, `UniBridge.Leaderboards.Editor`, `UniBridge.Purchases.Editor`, `UniBridge.Rate.Editor`, `UniBridge.Share.Editor`.
 
+**Optional async extension**: `UniBridge.Async.Runtime` (`Runtime/Async/`) — gated by `UNIBRIDGE_UNITASK` via `versionDefines` on `com.cysharp.unitask`. Compiles only when UniTask is installed; otherwise silently absent. Provides `UniTask`-based wrappers around every facade (see *Async API* section below).
+
 **Tooling**: `StoreScreenshots.Runtime`, `StoreScreenshots.Editor`.
 
 ### Ad Adapters
@@ -464,6 +466,40 @@ Same pattern as Ads (self-register, asmdef gated by define, `AdapterDefines` ent
 `DebugPurchaseSource` — UI Toolkit overlay dialog. "Buy" → `Success`; "Cancel" → `Cancelled`. `AlreadyOwned` for non-consumables in cache returns immediately. Implemented via `DebugPurchasePanel` MonoBehaviour (built in pure C#, no UXML/USS). `EnsureUI()` lazy-called on first `Show()`. Looks for existing `UIDocument` to reuse its panel; else creates fallback `UIDocument`+`PanelSettings`. Labels/buttons get explicit font via `Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf")`. **Pattern:** `OnConfirm`/`OnCancel` save `_callback` to local before calling `Hide()` (which nulls `_callback`), then invoke local.
 
 `DebugShareSource`, `DebugAnalyticsSource`, `DebugAuthSource` — log + simulate success in Editor.
+
+## Async API (optional)
+
+Namespace: `UniBridge.Async`. Lives in `UniBridge.Async.Runtime` asmdef, gated by `UNIBRIDGE_UNITASK` (set automatically when `com.cysharp.unitask` is in `Packages/manifest.json`). If UniTask is not installed, the asmdef does not compile and nothing is exposed — callback-based APIs remain unchanged.
+
+Static wrappers parallel each facade:
+
+| Wrapper class | Methods |
+|---|---|
+| `UniBridgeSavesAsync` | `SaveAsync<T>`, `LoadAsync<T>`, `LoadRawAsync`, `DeleteAsync`, `HasKeyAsync` |
+| `UniBridgeAdsAsync` | `ShowInterstitialAsync`, `ShowRewardAsync` |
+| `UniBridgeLeaderboardsAsync` | `SubmitScoreAsync`, `GetEntriesAsync`, `GetPlayerEntryAsync` |
+| `UniBridgePurchasesAsync` | `BuyAsync`, `FetchProductsAsync`, `GetProductAsync`, `RefreshPurchasesAsync`, `RestorePurchasesAsync` |
+| `UniBridgeRateAsync` | `RequestReviewAsync` |
+| `UniBridgeShareAsync` | `ShowShareSheetAsync(ct, params ShareItem[])` |
+| `UniBridgeAuthAsync` | `AuthorizeAsync` |
+
+Every method accepts an optional `CancellationToken`. Semantics:
+- Pre-dispatch cancel → `UniTask.FromCanceled<T>(ct)`.
+- Post-dispatch cancel → best-effort: completion source flips to canceled when the callback fires.
+- No cancel → regular result propagation.
+
+All wrappers route through `AsyncHelpers.Await<T>` / `Await<T1,T2>` (internal), which handles the `UniTaskCompletionSource` + `CancellationTokenRegistration` dance and disposes the registration on completion.
+
+Usage example:
+```csharp
+using UniBridge.Async;
+
+var (ok, data) = await UniBridgeSavesAsync.LoadAsync<SaveData>("LocalData", ct);
+var status     = await UniBridgeAdsAsync.ShowInterstitialAsync("level_end", ct);
+var result     = await UniBridgePurchasesAsync.BuyAsync("gems_100", ct);
+```
+
+Callback APIs remain the canonical surface — async wrappers are opt-in sugar. Don't add business logic to them; if a feature needs a new async-only behavior, it belongs in the underlying facade first.
 
 ## Logging Convention
 
