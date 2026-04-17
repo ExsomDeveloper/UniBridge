@@ -154,6 +154,16 @@ namespace UniBridge
             cntRT.pivot = new Vector2(0.5f, 1);
             cntRT.anchoredPosition = Vector2.zero;
             cntRT.sizeDelta = new Vector2(0, 0);
+
+            // VerticalLayoutGroup drives children's heights so ContentSizeFitter can compute total content height.
+            // Without this, ContentSizeFitter on an empty GO sees no ILayoutElement and content stays at height 0
+            // → ScrollRect has nothing to scroll.
+            var vlg = contentGO.AddComponent<VerticalLayoutGroup>();
+            vlg.childControlWidth = true;
+            vlg.childControlHeight = true;
+            vlg.childForceExpandWidth = true;
+            vlg.childForceExpandHeight = false;
+            vlg.padding = new RectOffset(6, 6, 4, 4);
             var fitter = contentGO.AddComponent<ContentSizeFitter>();
             fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
             _scrollRect.content = cntRT;
@@ -163,11 +173,8 @@ namespace UniBridge
             _logText.alignment = TextAnchor.UpperLeft;
             _logText.horizontalOverflow = HorizontalWrapMode.Wrap;
             _logText.verticalOverflow = VerticalWrapMode.Overflow;
-            var ltRT = _logText.GetComponent<RectTransform>();
-            ltRT.anchorMin = new Vector2(0, 1); ltRT.anchorMax = new Vector2(1, 1);
-            ltRT.pivot = new Vector2(0.5f, 1);
-            ltRT.anchoredPosition = new Vector2(0, -4);
-            ltRT.sizeDelta = new Vector2(-12, 0);
+            // Text implements ILayoutElement → VerticalLayoutGroup picks up its preferredHeight.
+            // No manual anchor/sizeDelta: VerticalLayoutGroup manages layout fully.
 
             // Raw fallback (hidden by default)
             _rawPanel = NewChild("RawPanel", _root.transform);
@@ -213,6 +220,9 @@ namespace UniBridge
 
         private void RefreshEntries()
         {
+            // Preserve user scroll position: only auto-stick to bottom if already there.
+            bool wasAtBottom = _scrollRect == null || _scrollRect.verticalNormalizedPosition <= 0.05f;
+
             var entries = UniBridgeLogger.GetSnapshot();
             var sb = new StringBuilder(entries.Length * 96);
             foreach (var e in entries)
@@ -233,7 +243,7 @@ namespace UniBridge
             _statusText.text = $"{entries.Length} entries";
             if (_rawPanel.activeSelf) _rawField.text = UniBridgeLogger.ExportAsText();
             Canvas.ForceUpdateCanvases();
-            _scrollRect.verticalNormalizedPosition = 0f;
+            if (wasAtBottom) _scrollRect.verticalNormalizedPosition = 0f;
         }
 
         private void Update()
