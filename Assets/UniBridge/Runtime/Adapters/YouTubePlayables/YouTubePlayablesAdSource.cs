@@ -18,8 +18,10 @@ namespace UniBridge
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void RegisterAdapter()
         {
+            VerboseLog.Log("YT:Ad", "RegisterAdapter enter — SubsystemRegistration");
             AdSourceRegistry.Register("UNIBRIDGE_YTPLAYABLES", config => new YouTubePlayablesAdSource(), 100);
             Debug.Log("[UniBridge] YouTube Playables ad adapter registered");
+            VerboseLog.Log("YT:Ad", "RegisterAdapter done (key=UNIBRIDGE_YTPLAYABLES, priority=100)");
         }
 
         public event Action OnInterstitialClosed;
@@ -34,35 +36,62 @@ namespace UniBridge
         public bool IsRewardedSupported     => false;
         public bool IsBannerSupported       => false;
 
-        public bool IsInterstitialReady() => _initialized && YTPlayables_InPlayablesEnv() == 1;
+        private static bool _interstitialReadyLogged;
+        public bool IsInterstitialReady()
+        {
+            var inEnv = YTPlayables_InPlayablesEnv() == 1;
+            var ready = _initialized && inEnv;
+            if (!_interstitialReadyLogged)
+            {
+                _interstitialReadyLogged = true;
+                VerboseLog.Log("YT:Ad", $"IsInterstitialReady first-check: init={_initialized}, inEnv={inEnv} → {ready}");
+            }
+            return ready;
+        }
         public bool IsRewardReady()       => false;
         public bool IsBannerReady()       => false;
 
         public void Initialize(Action onInitSuccess, Action onInitFailed)
         {
+            VerboseLog.Log("YT:Ad", $"Initialize enter (alreadyInit={_initialized}, inPlayablesEnv={YTPlayables_InPlayablesEnv() == 1})");
             if (_initialized) { onInitSuccess?.Invoke(); return; }
             _instance    = this;
             _initialized = true;
             Debug.Log($"[{nameof(YouTubePlayablesAdSource)}] Initialized");
             onInitSuccess?.Invoke();
+            VerboseLog.Log("YT:Ad", "Initialize done");
         }
 
         public void ShowInterstitial(Action<AdStatus> endCallback, string placementName = "")
         {
-            if (!_initialized || YTPlayables_InPlayablesEnv() != 1)
+            VerboseLog.Log("YT:Ad", $"ShowInterstitial enter (placement=\"{placementName}\", initialized={_initialized}, inEnv={YTPlayables_InPlayablesEnv() == 1})");
+            if (!_initialized)
             {
+                VerboseLog.Warn("YT:Ad", "ShowInterstitial: adapter not initialized → Failed");
+                endCallback?.Invoke(AdStatus.Failed);
+                OnInterstitialClosed?.Invoke();
+                return;
+            }
+            if (YTPlayables_InPlayablesEnv() != 1)
+            {
+                VerboseLog.Warn("YT:Ad", "ShowInterstitial: not in Playables env → Failed");
                 endCallback?.Invoke(AdStatus.Failed);
                 OnInterstitialClosed?.Invoke();
                 return;
             }
 
+            if (_interstitialCallback != null)
+                VerboseLog.Warn("YT:Ad", "ShowInterstitial: previous callback not drained — overwriting");
+
             _interstitialCallback = endCallback;
+            VerboseLog.Log("YT:Ad", "→ YTPlayables_RequestInterstitialAd dispatching");
             YTPlayables_RequestInterstitialAd(OnInterstitialSuccess, OnInterstitialFail);
         }
 
         [MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnInterstitialSuccess(int _)
         {
+            VerboseLog.Log("YT:Ad", "← RequestInterstitialAd success");
             var cb = _interstitialCallback;
             _interstitialCallback = null;
             cb?.Invoke(AdStatus.Completed);
@@ -72,6 +101,7 @@ namespace UniBridge
         [MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnInterstitialFail(int _)
         {
+            VerboseLog.Warn("YT:Ad", "← RequestInterstitialAd failed");
             var cb = _interstitialCallback;
             _interstitialCallback = null;
             cb?.Invoke(AdStatus.Failed);
@@ -80,16 +110,17 @@ namespace UniBridge
 
         public void ShowReward(Action<AdStatus> endCallback, string placementName = "")
         {
+            VerboseLog.Warn("YT:Ad", $"ShowReward(\"{placementName}\") called — rewarded ads not supported on YT Playables → Failed");
             Debug.LogWarning($"[{nameof(YouTubePlayablesAdSource)}] Rewarded ads are not supported on YouTube Playables");
             endCallback?.Invoke(AdStatus.Failed);
             OnRewardClosed?.Invoke();
         }
 
-        public void ShowBanner()    { }
-        public void HideBanner()    { }
-        public void DestroyBanner() { }
-        public void EnableYoungMode()  { }
-        public void DisableYoungMode() { }
+        public void ShowBanner()    { VerboseLog.Log("YT:Ad", "ShowBanner called — not supported on YT Playables, no-op"); }
+        public void HideBanner()    { VerboseLog.Log("YT:Ad", "HideBanner called — not supported on YT Playables, no-op"); }
+        public void DestroyBanner() { VerboseLog.Log("YT:Ad", "DestroyBanner called — not supported on YT Playables, no-op"); }
+        public void EnableYoungMode()  { VerboseLog.Log("YT:Ad", "EnableYoungMode called — no-op on YT Playables"); }
+        public void DisableYoungMode() { VerboseLog.Log("YT:Ad", "DisableYoungMode called — no-op on YT Playables"); }
     }
 }
 #endif

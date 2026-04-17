@@ -15,9 +15,14 @@ namespace UniBridge.Editor
 
         public static bool IsInstalled() => File.Exists(Path.Combine(TargetDir, "index.html"));
 
-        public static void EnsureInstalled()
+        public static void EnsureInstalled() => Install(force: false);
+
+        [MenuItem("UniBridge/WebGL Templates/Reinstall YouTube Playables (overwrite)")]
+        public static void ForceReinstall() => Install(force: true);
+
+        private static void Install(bool force)
         {
-            if (IsInstalled()) return;
+            if (!force && IsInstalled()) return;
 
             var sourceDir = FindSourceDir();
             if (sourceDir == null || !Directory.Exists(sourceDir))
@@ -30,21 +35,25 @@ namespace UniBridge.Editor
 
             Directory.CreateDirectory(TargetDir);
 
+            int copied = 0;
             foreach (var file in Files)
             {
                 var src = Path.Combine(sourceDir, file);
                 var dst = Path.Combine(TargetDir, file);
-                if (File.Exists(src) && !File.Exists(dst))
-                    File.Copy(src, dst);
+                if (!File.Exists(src)) continue;
+                if (File.Exists(dst) && !force) continue;
+                File.Copy(src, dst, overwrite: true);
+                copied++;
             }
 
             AssetDatabase.Refresh();
-            Debug.Log("[UniBridge] YouTube Playables WebGL template installed in Assets/WebGLTemplates/YouTubePlayables/");
+            Debug.Log($"[UniBridge] YouTube Playables WebGL template {(force ? "reinstalled" : "installed")}: {copied} files copied to {TargetDir}");
 
-            EditorUtility.DisplayDialog("UniBridge",
-                "WebGL-шаблон YouTubePlayables установлен.\n\n" +
-                "Перезапустите Unity, чтобы шаблон появился в Player Settings > WebGL > Resolution and Presentation.",
-                "OK");
+            if (!force)
+                EditorUtility.DisplayDialog("UniBridge",
+                    "WebGL-шаблон YouTubePlayables установлен.\n\n" +
+                    "Перезапустите Unity, чтобы шаблон появился в Player Settings > WebGL > Resolution and Presentation.",
+                    "OK");
         }
 
         private static string FindSourceDir()

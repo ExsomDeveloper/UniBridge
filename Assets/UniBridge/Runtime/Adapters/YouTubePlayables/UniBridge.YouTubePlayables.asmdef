@@ -3,6 +3,7 @@
     "rootNamespace": "UniBridge",
     "references": [
         "UniBridge.Runtime",
+        "UniBridge.Core.Runtime",
         "UniBridge.Leaderboards.Runtime"
     ],
     "includePlatforms": [],

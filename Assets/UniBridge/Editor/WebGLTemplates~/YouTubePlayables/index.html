@@ -24,11 +24,172 @@
                 height: 100%;
                 display: block;
             }
+            /* UB_LOGGER_BEGIN */
+            /* Template-level log capture panel — survives Unity load failures. */
+            #ub-log-panel {
+                position: fixed;
+                right: 8px; bottom: 8px;
+                z-index: 2147483647;
+                display: flex;
+                gap: 4px;
+                align-items: center;
+                background: rgba(0,0,0,0.55);
+                border: 1px solid rgba(255,255,255,0.18);
+                border-radius: 6px;
+                padding: 4px 6px;
+                font: 11px/1.2 monospace;
+                color: #fff;
+                pointer-events: auto;
+                user-select: none;
+                opacity: 0.55;
+                transition: opacity 0.15s;
+            }
+            #ub-log-panel:hover { opacity: 1; }
+            #ub-log-count {
+                min-width: 24px;
+                text-align: center;
+                background: rgba(255,255,255,0.12);
+                border-radius: 3px;
+                padding: 2px 4px;
+                font-weight: bold;
+            }
+            #ub-log-count.has-error { background: #c0392b; color: #fff; }
+            #ub-log-panel button {
+                background: rgba(255,255,255,0.12);
+                color: #fff;
+                border: 1px solid rgba(255,255,255,0.2);
+                border-radius: 3px;
+                padding: 3px 8px;
+                font: inherit;
+                cursor: pointer;
+            }
+            #ub-log-panel button:hover { background: rgba(255,255,255,0.22); }
+            /* UB_LOGGER_END */
         </style>
+
+        <!-- UB_LOGGER_BEGIN -->
+        <!-- Template-level log capture: install BEFORE any other script so we catch SDK + Unity loader errors. -->
+        <script>
+            (function () {
+                var BUF = [];
+                var MAX = 1000;
+                var hasError = false;
+
+                function updateBadge(isErr) {
+                    if (isErr) hasError = true;
+                    var el = document.getElementById('ub-log-count');
+                    if (el) {
+                        el.textContent = String(BUF.length);
+                        if (hasError) el.classList.add('has-error');
+                    }
+                }
+
+                function fmt(arg) {
+                    if (arg instanceof Error) return arg.stack || (arg.name + ': ' + arg.message);
+                    if (typeof arg === 'object' && arg !== null) {
+                        try { return JSON.stringify(arg); } catch (e) { return String(arg); }
+                    }
+                    return String(arg);
+                }
+
+                function push(level, args) {
+                    try {
+                        var t = new Date().toISOString().slice(11, 23);
+                        var msg = Array.prototype.map.call(args, fmt).join(' ');
+                        BUF.push('[' + t + '] ' + level + ': ' + msg);
+                        if (BUF.length > MAX) BUF.shift();
+                        updateBadge(level === 'ERROR');
+                    } catch (e) { /* never throw from logger */ }
+                }
+
+                ['log', 'info', 'warn', 'error', 'debug'].forEach(function (lvl) {
+                    var orig = console[lvl];
+                    console[lvl] = function () {
+                        push(lvl.toUpperCase(), arguments);
+                        if (orig) try { orig.apply(console, arguments); } catch (e) {}
+                    };
+                });
+
+                window.addEventListener('error', function (e) {
+                    push('ERROR', ['window.error:',
+                        (e.error && (e.error.stack || e.error.message)) || e.message,
+                        '@', e.filename + ':' + e.lineno + ':' + e.colno]);
+                });
+                window.addEventListener('unhandledrejection', function (e) {
+                    push('ERROR', ['unhandledrejection:',
+                        (e.reason && (e.reason.stack || e.reason.message)) || e.reason]);
+                });
+
+                window.__ubLogBuffer   = BUF;
+                window.__ubLogUpdate   = updateBadge;
+
+                window.__ubLogCopy = function () {
+                    var text = BUF.join('\n');
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(text).then(function () {
+                            console.log('[UB:Template] Logs copied to clipboard');
+                        }).catch(function (err) {
+                            console.warn('[UB:Template] navigator.clipboard failed, trying execCommand fallback:', err);
+                            __ubFallbackCopy(text);
+                        });
+                    } else {
+                        __ubFallbackCopy(text);
+                    }
+                };
+
+                function __ubFallbackCopy(text) {
+                    try {
+                        var ta = document.createElement('textarea');
+                        ta.value = text;
+                        ta.style.position = 'fixed';
+                        ta.style.opacity = '0';
+                        document.body.appendChild(ta);
+                        ta.focus(); ta.select();
+                        var ok = document.execCommand('copy');
+                        document.body.removeChild(ta);
+                        console.log(ok ? '[UB:Template] Copied via execCommand' : '[UB:Template] execCommand returned false');
+                    } catch (e) {
+                        console.error('[UB:Template] Fallback copy failed:', e);
+                    }
+                }
+
+                window.__ubLogDownload = function () {
+                    try {
+                        var text = BUF.join('\n');
+                        var name = 'unibridge_template_log_' + new Date().toISOString().replace(/[:.]/g, '-') + '.txt';
+                        var blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+                        var url  = URL.createObjectURL(blob);
+                        var a = document.createElement('a');
+                        a.href = url; a.download = name;
+                        a.style.display = 'none';
+                        document.body.appendChild(a);
+                        a.click();
+                        setTimeout(function () {
+                            document.body.removeChild(a);
+                            URL.revokeObjectURL(url);
+                        }, 1000);
+                        console.log('[UB:Template] Download triggered: ' + name);
+                    } catch (e) {
+                        console.error('[UB:Template] Download failed:', e);
+                    }
+                };
+            })();
+        </script>
+        <!-- UB_LOGGER_END -->
+
         <script src="https://www.youtube.com/game_api/v1"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>
+
+        <!-- UB_LOGGER_BEGIN -->
+        <div id="ub-log-panel">
+            <span id="ub-log-count" title="Total captured log entries (red = an error was captured)">0</span>
+            <button type="button" onclick="window.__ubLogCopy()">Copy</button>
+            <button type="button" onclick="window.__ubLogDownload()">Download</button>
+        </div>
+        <!-- UB_LOGGER_END -->
+
         <script>
             // ── Настройки портретного режима ────────────────────────────
             // Включите pillarbox (полосы по бокам) для portrait-игр в ландшафтной ориентации
@@ -63,6 +224,9 @@
 
             var loaderScript = document.createElement('script');
             loaderScript.src = 'Build/{{{ LOADER_FILENAME }}}';
+            loaderScript.onerror = function () {
+                console.error('[UB:Template] loader script failed to load: Build/{{{ LOADER_FILENAME }}}');
+            };
             loaderScript.onload = function () {
                 createUnityInstance(canvas, {
                     dataUrl: 'Build/{{{ DATA_FILENAME }}}',

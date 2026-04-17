@@ -19,7 +19,7 @@ namespace UniBridge.Editor
 
         // ── Nav ──────────────────────────────────────────────────────────────────
 
-        private static readonly string[] NavItems = { "UniBridge", "UniBridgePurchases", "UniBridgeLeaderboards", "UniBridgeRate", "UniBridgeAnalytics", "General" };
+        private static readonly string[] NavItems = { "Ads", "Purchases", "Leaderboards", "Rate", "Analytics", "Logger", "General" };
 
         private int _selectedIndex;
 
@@ -38,6 +38,7 @@ namespace UniBridge.Editor
         private UniBridgeLeaderboardsConfig _leaderboardsConfig;
         private UniBridgeRateConfig         _rateConfig;
         private UniBridgeAnalyticsConfig    _analyticsConfig;
+        private UniBridgeLoggerConfig       _loggerConfig;
         private SerializedObject      _serializedAds;
         private SerializedObject      _serializedPurchases;
         private SerializedObject      _serializedLeaderboards;
@@ -93,6 +94,7 @@ namespace UniBridge.Editor
             _leaderboardsConfig = EditorConfigHelper.EnsureProjectAsset<UniBridgeLeaderboardsConfig>(nameof(UniBridgeLeaderboardsConfig));
             _rateConfig         = EditorConfigHelper.EnsureProjectAsset<UniBridgeRateConfig>(nameof(UniBridgeRateConfig));
             _analyticsConfig    = EditorConfigHelper.EnsureProjectAsset<UniBridgeAnalyticsConfig>(nameof(UniBridgeAnalyticsConfig));
+            _loggerConfig       = EditorConfigHelper.EnsureProjectAsset<UniBridgeLoggerConfig>(nameof(UniBridgeLoggerConfig));
 
             _serializedAds      = new SerializedObject(_adsConfig);
             _levelPlay          = new LevelPlaySettingsDrawer(_adsConfig);
@@ -225,7 +227,8 @@ namespace UniBridge.Editor
                 case 2: DrawUniBridgeLeaderboards();   break;
                 case 3: DrawUniBridgeRate();           break;
                 case 4: DrawUniBridgeAnalytics();      break;
-                case 5: DrawGeneral();           break;
+                case 5: DrawLogger();                  break;
+                case 6: DrawGeneral();                 break;
             }
 
             EditorGUILayout.EndScrollView();
@@ -325,6 +328,16 @@ namespace UniBridge.Editor
 
         private void DrawPurchasesProducts()
         {
+            SectionHeader("General");
+
+            EditorGUI.BeginChangeCheck();
+            _purchasesConfig.AutoInitialize = EditorGUILayout.Toggle(
+                new GUIContent("Auto Initialize", "Automatically initialize UniBridgePurchases on startup"),
+                _purchasesConfig.AutoInitialize);
+            if (EditorGUI.EndChangeCheck())
+                EditorUtility.SetDirty(_purchasesConfig);
+
+            EditorGUILayout.Space(12);
             SectionHeader("Product Catalog");
             var productsProp = _serializedPurchases.FindProperty("_products");
             if (productsProp != null)
@@ -423,6 +436,49 @@ namespace UniBridge.Editor
             EditorGUILayout.Space(8);
         }
 
+        // ── Section: Logger ──────────────────────────────────────────────────────
+
+        private void DrawLogger()
+        {
+            if (_loggerConfig == null) return;
+
+            SectionHeader("General");
+
+            EditorGUI.BeginChangeCheck();
+
+            _loggerConfig.Enabled = EditorGUILayout.Toggle(
+                new GUIContent("Enabled", "Master switch. When off, logs are not collected and the overlay is unavailable. Also strips the template-level log panel from WebGL builds."),
+                _loggerConfig.Enabled);
+
+            using (new EditorGUI.DisabledScope(!_loggerConfig.Enabled))
+            {
+                _loggerConfig.OpenAtStartup = EditorGUILayout.Toggle(
+                    new GUIContent("Open At Startup", "If true, the overlay opens automatically on game start (no gesture needed)."),
+                    _loggerConfig.OpenAtStartup);
+
+                _loggerConfig.BufferSize = EditorGUILayout.IntField(
+                    new GUIContent("Buffer Size", "Max number of log entries kept in the ring buffer."),
+                    _loggerConfig.BufferSize);
+
+                _loggerConfig.ActivationGesture = (LogActivationGesture)EditorGUILayout.EnumPopup(
+                    new GUIContent("Activation Gesture", "How the overlay is summoned at runtime."),
+                    _loggerConfig.ActivationGesture);
+
+                _loggerConfig.IncludeStackTraces = EditorGUILayout.Toggle(
+                    new GUIContent("Include Stack Traces", "Include Unity stack traces in the export. Heavier payload; useful for dev builds."),
+                    _loggerConfig.IncludeStackTraces);
+            }
+
+            if (EditorGUI.EndChangeCheck())
+                EditorUtility.SetDirty(_loggerConfig);
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.HelpBox(
+                "In Editor: F12 toggles the overlay. In WebGL: 6 taps in the top-left corner of the screen.\n\n" +
+                "Template-level fallback (HTML console with Copy/Download) is stripped from the WebGL build automatically when Enabled = false.",
+                MessageType.Info);
+        }
+
         // ── Section: General ──────────────────────────────────────────────────────
 
         private void DrawGeneral()
@@ -472,64 +528,12 @@ namespace UniBridge.Editor
                 EditorUtility.SetDirty(_adsConfig);
 
             EditorGUILayout.Space(12);
-            SectionHeader("Saves");
-
-            EditorGUI.BeginChangeCheck();
-
-            _adsConfig.AutoInitializeSaves = EditorGUILayout.Toggle(
-                new GUIContent("Auto Initialize Saves", "Automatically initialize the save system on startup"),
-                _adsConfig.AutoInitializeSaves);
-
-            if (EditorGUI.EndChangeCheck())
-                EditorUtility.SetDirty(_adsConfig);
-
-            EditorGUILayout.Space(12);
-            SectionHeader("Purchases");
-
-            EditorGUI.BeginChangeCheck();
-
-            _purchasesConfig.AutoInitialize = EditorGUILayout.Toggle(
-                new GUIContent("Auto Initialize", "Automatically initialize UniBridgePurchases on startup"),
-                _purchasesConfig.AutoInitialize);
-
-            if (EditorGUI.EndChangeCheck())
-                EditorUtility.SetDirty(_purchasesConfig);
-
-            EditorGUILayout.Space(12);
-            SectionHeader("Leaderboards");
-
-            EditorGUI.BeginChangeCheck();
-
-            _leaderboardsConfig.AutoInitialize = EditorGUILayout.Toggle(
-                new GUIContent("Auto Initialize", "Автоматически инициализировать UniBridgeLeaderboards при запуске"),
-                _leaderboardsConfig.AutoInitialize);
-
-            if (EditorGUI.EndChangeCheck())
-                EditorUtility.SetDirty(_leaderboardsConfig);
-
-            EditorGUILayout.Space(12);
-            SectionHeader("Rate");
-
-            EditorGUI.BeginChangeCheck();
-            _rateConfig.AutoInitialize = EditorGUILayout.Toggle(
-                new GUIContent("Auto Initialize", "Автоматически инициализировать UniBridgeRate при запуске"),
-                _rateConfig.AutoInitialize);
-            if (EditorGUI.EndChangeCheck())
-                EditorUtility.SetDirty(_rateConfig);
-
-            EditorGUILayout.Space(12);
             SectionHeader("Verbose Logging");
             EditorGUILayout.HelpBox(
                 "Включение добавляет scripting define. Unity перекомпилирует — логи компилируются или вырезаются полностью (нулевой оверхед в release).",
                 MessageType.None);
             EditorGUILayout.Space(4);
-            DrawVerboseToggle("Ads",          "UNIBRIDGE_VERBOSE_LOG");
-            DrawVerboseToggle("Purchases",    "UNIBRIDGEPURCHASES_VERBOSE_LOG");
-            DrawVerboseToggle("Leaderboards", "UNIBRIDGELEADERBOARDS_VERBOSE_LOG");
-            DrawVerboseToggle("Saves",        "UNIBRIDGESAVES_VERBOSE_LOG");
-            DrawVerboseToggle("Rate",         "UNIBRIDGERATE_VERBOSE_LOG");
-            DrawVerboseToggle("Analytics",    "UNIBRIDGEANALYTICS_VERBOSE_LOG");
-            DrawVerboseToggle("Share",        "UNIBRIDGESHARE_VERBOSE_LOG");
+            DrawVerboseFlagsDropdown();
 
             EditorGUILayout.Space(8);
         }
@@ -630,16 +634,51 @@ namespace UniBridge.Editor
 
         // ── Helpers ───────────────────────────────────────────────────────────────
 
-        private static void DrawVerboseToggle(string label, string define)
+        [System.Flags]
+        private enum VerboseFlags
+        {
+            None         = 0,
+            Ads          = 1 << 0,
+            Purchases    = 1 << 1,
+            Leaderboards = 1 << 2,
+            Saves        = 1 << 3,
+            Rate         = 1 << 4,
+            Analytics    = 1 << 5,
+            Share        = 1 << 6,
+        }
+
+        private static readonly (VerboseFlags Flag, string Define)[] VerboseDefineMap =
+        {
+            (VerboseFlags.Ads,          "UNIBRIDGE_VERBOSE_LOG"),
+            (VerboseFlags.Purchases,    "UNIBRIDGEPURCHASES_VERBOSE_LOG"),
+            (VerboseFlags.Leaderboards, "UNIBRIDGELEADERBOARDS_VERBOSE_LOG"),
+            (VerboseFlags.Saves,        "UNIBRIDGESAVES_VERBOSE_LOG"),
+            (VerboseFlags.Rate,         "UNIBRIDGERATE_VERBOSE_LOG"),
+            (VerboseFlags.Analytics,    "UNIBRIDGEANALYTICS_VERBOSE_LOG"),
+            (VerboseFlags.Share,        "UNIBRIDGESHARE_VERBOSE_LOG"),
+        };
+
+        private static void DrawVerboseFlagsDropdown()
         {
             var defines = ScriptingDefinesManager.GetScriptingDefineSymbolsForSelectedBuildTarget();
-            bool current = defines.Contains(define);
+
+            VerboseFlags current = VerboseFlags.None;
+            foreach (var (flag, define) in VerboseDefineMap)
+                if (defines.Contains(define)) current |= flag;
+
             EditorGUI.BeginChangeCheck();
-            bool next = EditorGUILayout.Toggle(label, current);
-            if (EditorGUI.EndChangeCheck() && next != current)
+            var next = (VerboseFlags)EditorGUILayout.EnumFlagsField(
+                new GUIContent("Verbose Subsystems", "Select which subsystems should emit verbose logs. Toggling adds/removes scripting defines and triggers Unity recompile."),
+                current);
+            if (!EditorGUI.EndChangeCheck() || next == current) return;
+
+            foreach (var (flag, define) in VerboseDefineMap)
             {
-                if (next) ScriptingDefinesManager.AddDefine(define);
-                else      ScriptingDefinesManager.RemoveDefine(define);
+                bool wantEnabled = (next & flag) != 0;
+                bool isEnabled   = (current & flag) != 0;
+                if (wantEnabled == isEnabled) continue;
+                if (wantEnabled) ScriptingDefinesManager.AddDefine(define);
+                else             ScriptingDefinesManager.RemoveDefine(define);
             }
         }
 

@@ -1,4 +1,5 @@
 using System;
+using System.Threading;
 using UnityEngine;
 
 namespace UniBridge
@@ -92,6 +93,7 @@ namespace UniBridge
         {
             if (_provider != null)
             {
+                VerboseLog.Log("Env", $"Replacing provider: {_providerName} ({_provider.GetType().Name}) → {name} ({provider?.GetType().Name ?? "<null>"})");
                 _provider.AudioStateChanged      -= OnAudioStateChanged;
                 _provider.PauseStateChanged      -= OnPauseStateChanged;
                 _provider.VisibilityStateChanged -= OnVisibilityStateChanged;
@@ -105,6 +107,11 @@ namespace UniBridge
                 _provider.AudioStateChanged      += OnAudioStateChanged;
                 _provider.PauseStateChanged      += OnPauseStateChanged;
                 _provider.VisibilityStateChanged += OnVisibilityStateChanged;
+                VerboseLog.Log("Env", $"Provider set: {name} ({provider.GetType().FullName}) | frame={Time.frameCount} | realtime={Time.realtimeSinceStartup:F3}s");
+            }
+            else
+            {
+                VerboseLog.Warn("Env", $"Provider cleared (name={name})");
             }
         }
 
@@ -116,7 +123,16 @@ namespace UniBridge
         public static void SendMessage(PlatformMessage message)
         {
             UnityEngine.Debug.Log($"[{nameof(UniBridgeEnvironment)}] SendMessage: {message} (provider: {_provider?.GetType().Name ?? "none"})");
-            _provider?.SendMessage(message);
+
+            if (_provider == null)
+            {
+                VerboseLog.Warn("Env", $"SendMessage({message}) — NO PROVIDER REGISTERED, call dropped | frame={Time.frameCount} | time={Time.realtimeSinceStartup:F3}s");
+                return;
+            }
+
+            VerboseLog.Log("Env", $"SendMessage({message}) enter | provider={_provider.GetType().Name} | frame={Time.frameCount} | time={Time.realtimeSinceStartup:F3}s | thread={Thread.CurrentThread.ManagedThreadId}");
+            _provider.SendMessage(message);
+            VerboseLog.Log("Env", $"SendMessage({message}) done");
         }
 
         // ── Event relay ───────────────────────────────────────────────────────
