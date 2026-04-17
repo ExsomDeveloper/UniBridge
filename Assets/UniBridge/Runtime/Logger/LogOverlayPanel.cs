@@ -3,6 +3,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using AOT;
 using UnityEngine;
+using UnityEngine.Scripting;
 using UnityEngine.UI;
 
 namespace UniBridge
@@ -11,6 +12,7 @@ namespace UniBridge
     /// Legacy uGUI overlay rendered on a dedicated Canvas (Screen Space Overlay, max sortingOrder).
     /// uGUI is bulletproof at runtime — no themes, no PanelSettings, no asset dependencies. Always visible.
     /// </summary>
+    [Preserve]
     internal class LogOverlayPanel : MonoBehaviour
     {
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -324,10 +326,10 @@ namespace UniBridge
         }
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnCopyOk(int _)   => Debug.Log($"[{nameof(LogOverlayPanel)}] Copied to clipboard");
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnCopyFail(int _) => Debug.LogWarning($"[{nameof(LogOverlayPanel)}] Clipboard blocked — open Raw panel and select-all");
 #endif
 

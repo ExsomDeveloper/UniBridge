@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -12,6 +13,7 @@ namespace UniBridge
     /// YouTube only supports sending a score (sendScore). There is no API to retrieve entries or player rank.
     /// DisplayMode is SubmitOnly — the game should use SimulatedLeaderboardSource for in-game display.
     /// </summary>
+    [Preserve]
     public class YouTubePlayablesLeaderboardSource : ILeaderboardSource
     {
         [DllImport("__Internal")] private static extern void YTPlayables_SendScore(double score, Action<int> onSuccess, Action<int> onFail);
@@ -80,7 +82,7 @@ namespace UniBridge
             YTPlayables_SendScore((double)clamped, OnSubmitSuccess, OnSubmitFail);
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnSubmitSuccess(int _)
         {
             VerboseLog.Log("YT:LB", "← SendScore success");
@@ -89,7 +91,7 @@ namespace UniBridge
             cb?.Invoke(true);
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnSubmitFail(int _)
         {
             VerboseLog.Warn("YT:LB", "← SendScore failed");

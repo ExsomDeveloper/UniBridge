@@ -4,9 +4,11 @@ using System.IO;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
+    [Preserve]
     public class iOSShareSource : IShareSource
     {
         // ── Native callback ──────────────────────────────────────────────────────────────────────────────
@@ -19,7 +21,7 @@ namespace UniBridge
         // Static delegate — required for MonoPInvokeCallback (IL2CPP does not support lambdas)
         private static readonly UniBridgeShareNativeCallback _nativeCallback = OnNativeResult;
 
-        [MonoPInvokeCallback(typeof(UniBridgeShareNativeCallback))]
+        [Preserve, MonoPInvokeCallback(typeof(UniBridgeShareNativeCallback))]
         private static void OnNativeResult(int resultCode)
         {
             var cb = _pendingCallback;

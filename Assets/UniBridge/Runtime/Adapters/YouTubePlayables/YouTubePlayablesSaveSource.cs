@@ -13,6 +13,7 @@ namespace UniBridge
     /// YouTube provides a single-blob cloud save (loadData/saveData, max 3 MiB).
     /// This adapter layers key-value semantics on top using a JSON dictionary cached in memory.
     /// </summary>
+    [Preserve]
     public class YouTubePlayablesSaveSource : ISaveSource
     {
         [DllImport("__Internal")] private static extern void YTPlayables_LoadData(Action<string> onSuccess, Action<int> onFail);
@@ -129,7 +130,7 @@ namespace UniBridge
             YTPlayables_LoadData(OnLoadSuccess, OnLoadFail);
         }
 
-        [MonoPInvokeCallback(typeof(Action<string>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<string>))]
         private static void OnLoadSuccess(string data)
         {
             VerboseLog.Log("YT:Save", $"← LoadData success ({data?.Length ?? 0} chars)");
@@ -169,7 +170,7 @@ namespace UniBridge
             self.DrainPending();
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnLoadFail(int _)
         {
             VerboseLog.Warn("YT:Save", "← LoadData failed");
@@ -260,10 +261,10 @@ namespace UniBridge
             foreach (var cb in callbacks) cb?.Invoke(success);
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnSaveSuccess(int _) { VerboseLog.Log("YT:Save", "← SaveData success"); _instance?.OnFlushComplete(true); }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnSaveFail(int _)    { VerboseLog.Warn("YT:Save", "← SaveData failed"); _instance?.OnFlushComplete(false); }
     }
 }

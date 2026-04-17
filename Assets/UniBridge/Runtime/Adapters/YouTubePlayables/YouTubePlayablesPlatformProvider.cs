@@ -3,9 +3,11 @@ using System;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
+    [Preserve]
     internal static class YouTubePlayablesPlatformProvider
     {
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
@@ -19,6 +21,7 @@ namespace UniBridge
         }
     }
 
+    [Preserve]
     internal sealed class YouTubePlayablesPlatformParamsProvider : IPlatformParamsProvider
     {
         [DllImport("__Internal")] private static extern int    YTPlayables_InPlayablesEnv();
@@ -154,29 +157,29 @@ namespace UniBridge
             _ => $"unknown({code})"
         };
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnFirstFrameReadyStatus(int code) => VerboseLog.Log("YT:Provider", $"firstFrameReady → {DecodeStatus(code)}");
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnGameReadyStatus(int code) => VerboseLog.Log("YT:Provider", $"gameReady → {DecodeStatus(code)}");
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnRegisterAudioStatus(int code) => VerboseLog.Log("YT:Provider", $"RegisterAudio → {DecodeStatus(code)}");
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnRegisterPauseStatus(int code) => VerboseLog.Log("YT:Provider", $"RegisterPause → {DecodeStatus(code)}");
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnRegisterResumeStatus(int code) => VerboseLog.Log("YT:Provider", $"RegisterResume → {DecodeStatus(code)}");
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnAudioStateChanged(int isEnabled)
         {
             VerboseLog.Log("YT:Provider", $"← onAudioEnabledChange callback: enabled={isEnabled == 1}");
             _instance?.AudioStateChanged?.Invoke(isEnabled == 1);
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnPauseCallback(int _)
         {
             VerboseLog.Log("YT:Provider", "← onPause callback");
@@ -186,7 +189,7 @@ namespace UniBridge
             _instance.VisibilityStateChanged?.Invoke(false);
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnResumeCallback(int _)
         {
             VerboseLog.Log("YT:Provider", "← onResume callback");
@@ -196,7 +199,7 @@ namespace UniBridge
             _instance.VisibilityStateChanged?.Invoke(true);
         }
 
-        [MonoPInvokeCallback(typeof(Action<string>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<string>))]
         private static void OnLanguageFetched(string lang)
         {
             VerboseLog.Log("YT:Provider", $"← FetchLanguage resolved: \"{lang}\"");

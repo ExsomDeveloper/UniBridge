@@ -3,6 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 using AOT;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -10,6 +11,7 @@ namespace UniBridge
     /// IAdSource adapter for YouTube Playables.
     /// YouTube only supports interstitial ads (preview API). Rewarded and banner are not available.
     /// </summary>
+    [Preserve]
     public class YouTubePlayablesAdSource : IAdSource
     {
         [DllImport("__Internal")] private static extern void YTPlayables_RequestInterstitialAd(Action<int> onSuccess, Action<int> onFail);
@@ -88,7 +90,7 @@ namespace UniBridge
             YTPlayables_RequestInterstitialAd(OnInterstitialSuccess, OnInterstitialFail);
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnInterstitialSuccess(int _)
         {
             VerboseLog.Log("YT:Ad", "← RequestInterstitialAd success");
@@ -98,7 +100,7 @@ namespace UniBridge
             _instance?.OnInterstitialClosed?.Invoke();
         }
 
-        [MonoPInvokeCallback(typeof(Action<int>))]
+        [Preserve, MonoPInvokeCallback(typeof(Action<int>))]
         private static void OnInterstitialFail(int _)
         {
             VerboseLog.Warn("YT:Ad", "← RequestInterstitialAd failed");

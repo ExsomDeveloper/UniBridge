@@ -117,6 +117,16 @@ namespace UniBridge.Editor
                 Resources.Load<UniBridgeAnalyticsConfig>(nameof(UniBridgeAnalyticsConfig))?.PreferredAnalyticsAdapter,
                 AdapterDefines.GetAnalyticsAdapters(storeDefine));
 
+            // PlatformProvider (UniBridgeEnvironment) lives inside platform adapter assemblies
+            // and self-registers via [RuntimeInitializeOnLoadMethod]. Without a direct game-code
+            // reference, IL2CPP may strip it along with its DllImport declarations → jslib calls
+            // become dead code and certification fails (e.g. firstFrameReady never dispatched).
+            // Force-preserve the matching assembly per store, independent of adapter selection.
+            if (storeDefine == StorePlatformDefines.STORE_YOUTUBE)
+                AddDefine(defines, "UNIBRIDGE_YTPLAYABLES");
+            if (storeDefine == StorePlatformDefines.STORE_PLAYGAMA)
+                AddDefine(defines, "UNIBRIDGE_PLAYGAMA");
+
             var result = new List<string>();
             foreach (var define in defines)
                 if (AdapterAssemblies.TryGetValue(define, out var assembly))

@@ -2,6 +2,7 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace UniBridge
 {
@@ -12,6 +13,7 @@ namespace UniBridge
     /// Requires iCloud Key-Value capability enabled in Xcode.
     /// Falls back to LocalSaveSource when iCloud is unavailable (user not signed in to Apple ID).
     /// </summary>
+    [Preserve]
     public class iCloudSaveSource : ISaveSource
     {
         [DllImport("__Internal")] private static extern bool    UniBridgeSaves_IsAvailable();
