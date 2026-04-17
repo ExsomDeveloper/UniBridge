@@ -9,7 +9,7 @@ namespace UniBridge
 {
     internal static class PlaygamaPlatformProvider
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Register()
         {
             UniBridgeEnvironment.SetProvider(new PlaygamaPlatformParamsProvider(), "Playgama");

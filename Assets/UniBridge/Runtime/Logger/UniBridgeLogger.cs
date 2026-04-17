@@ -31,14 +31,24 @@ namespace UniBridge
         public static UniBridgeLoggerConfig Config => _config;
         public static bool IsEnabled => _config != null && _config.Enabled;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-        private static void AutoInitialize()
+        // SubsystemRegistration — earliest runtime stage. Subscribes before any facade
+        // BeforeSceneLoad init or adapter self-registration logs, so no early logs are lost.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void SubscribeEarly()
         {
             _config = Resources.Load<UniBridgeLoggerConfig>(nameof(UniBridgeLoggerConfig));
             if (_config == null || !_config.Enabled) return;
 
             _capacity = Mathf.Max(32, _config.BufferSize);
             Application.logMessageReceivedThreaded += OnLogReceived;
+        }
+
+        // BeforeSceneLoad — safe to create MonoBehaviours (GameObject creation is invalid
+        // during SubsystemRegistration on some platforms).
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        private static void AutoInitialize()
+        {
+            if (_config == null || !_config.Enabled) return;
 
             var go = new GameObject(nameof(UniBridgeLoggerRuntime));
             UnityEngine.Object.DontDestroyOnLoad(go);

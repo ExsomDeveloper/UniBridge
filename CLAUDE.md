@@ -61,7 +61,7 @@ Top-level facades, all follow the same pattern — static class, `AutoInitialize
 
 ### UniBridgeEnvironment
 
-Static utility. Provides platform-agnostic access via `IPlatformParamsProvider` (`Runtime/IPlatformParamsProvider.cs`). Providers self-register at `SubsystemRegistration`:
+Static utility. Provides platform-agnostic access via `IPlatformParamsProvider` (`Runtime/IPlatformParamsProvider.cs`). Providers self-register at `AfterAssembliesLoaded`:
 - `PlaygamaPlatformProvider` (`Runtime/Adapters/Playgama/PlaygamaPlatformProvider.cs`) — Playgama WebGL
 - `YouTubePlayablesPlatformProvider` (`Runtime/Adapters/YouTubePlayables/YouTubePlayablesPlatformProvider.cs`) — YouTube Playables WebGL
 
@@ -83,7 +83,12 @@ Each subsystem uses the same structure:
 2. **Registry** (Dictionary-based, keyed by SDK define string) — adapters self-register via `[RuntimeInitializeOnLoadMethod]` with a priority
 3. **Builder** (`*SourceBuilder`) — selects adapter at runtime; Editor always returns Debug adapter
 
-**Ad adapter registration timing:** Ad adapters use `SubsystemRegistration` (earliest) so they're registered before facades' `AutoInitialize` runs at `BeforeSceneLoad`. Other subsystems use `BeforeSceneLoad`.
+**Initialization ordering (Unity runtime stages):**
+1. `SubsystemRegistration` — `UniBridgeLogger` subscribes to `Application.logMessageReceivedThreaded` (must run before any `Debug.Log` so early logs aren't lost).
+2. `AfterAssembliesLoaded` — all adapters self-register (`AdSourceRegistry.Register`, `LeaderboardSourceRegistry.Register`, `AuthSourceRegistry.Register`, platform providers via `UniBridgeEnvironment.SetProvider`).
+3. `BeforeSceneLoad` — facades' `AutoInitialize` runs (`UniBridge`, `UniBridgePurchases`, `UniBridgeLeaderboards`, `UniBridgeSaves`, `UniBridgeRate`, `UniBridgeShare`, `UniBridgeAnalytics`, `UniBridgeAuth`). Also `UniBridgeLogger` creates the MonoBehaviour overlay.
+
+This gives deterministic ordering Logger → Adapters → Facades without relying on `ModuleInitializer` or intra-stage luck. Within a single stage Unity does NOT guarantee method order, so each role must live on its own stage.
 
 **Adapter selection** (`<Subsystem>SourceRegistry.Create(config)`): checks `config.Preferred*Adapter` — if registered, uses it; otherwise uses highest-priority registered adapter. Virtual keys (not real scripting defines) are handled explicitly in the Builder before consulting the registry:
 - **Leaderboards**: `"UNIBRIDGELEADERBOARDS_SIMULATED"` → `SimulatedLeaderboardSource`; `"UNITY_IOS_GAMECENTER"` treated as always installed in Build Manager UI
@@ -401,13 +406,13 @@ The Auth subsystem is the newest — use it as a reference implementation. Stand
 5. **Registry** (`Runtime/NewSubsystem/NewSubsystemSourceRegistry.cs`) — Dictionary keyed by SDK define
 6. **Debug adapter** (`Runtime/NewSubsystem/Adapters/Debug/DebugNewSubsystemSource.cs`)
 7. **asmdefs** — Runtime (`autoReferenced: true`) + Editor (`autoReferenced: false`)
-8. **SDK adapters** — self-register via `[RuntimeInitializeOnLoadMethod(SubsystemRegistration)]`, in adapter asmdef with `defineConstraints`
+8. **SDK adapters** — self-register via `[RuntimeInitializeOnLoadMethod(AfterAssembliesLoaded)]`, in adapter asmdef with `defineConstraints`
 9. **`AdapterLinkXmlGenerator.AdapterAssemblies`** entry per non-virtual define
 
 ## Adding a New Ad Adapter
 
 1. Implement `IAdSource`
-2. Self-register in `[RuntimeInitializeOnLoadMethod(SubsystemRegistration)]` via `AdSourceRegistry.Register("SDK_DEFINE_KEY", factory, priority)` — key = SDK scripting define
+2. Self-register in `[RuntimeInitializeOnLoadMethod(AfterAssembliesLoaded)]` via `AdSourceRegistry.Register("SDK_DEFINE_KEY", factory, priority)` — key = SDK scripting define
 3. Add scripting define; create asmdef gated by it
 4. Add to `AdapterDefines.AdsAdapterNames` and `AdapterDefines.GetAdAdapters()`
 5. Drawer in `Assets/UniBridge/Editor/Drawers/` implementing `ISettingsDrawer`

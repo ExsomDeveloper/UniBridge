@@ -7,7 +7,7 @@ namespace UniBridge
 {
     public class PlaygamaAuthSource : IAuthSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Register()
         {
             AuthSourceRegistry.Register("UNIBRIDGE_PLAYGAMA", _ => new PlaygamaAuthSource(), 100);

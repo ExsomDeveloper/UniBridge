@@ -10,7 +10,7 @@ namespace UniBridge
         /// <summary>
         /// Register this adapter with the runtime. Called automatically at startup.
         /// </summary>
-        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
 #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR

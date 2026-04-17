@@ -7,7 +7,7 @@ namespace UniBridge
 {
     public class YandexAdapter : IAdSource
     {
-        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
 #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR

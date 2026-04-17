@@ -15,10 +15,10 @@ namespace UniBridge
         [DllImport("__Internal")] private static extern void YTPlayables_RequestInterstitialAd(Action<int> onSuccess, Action<int> onFail);
         [DllImport("__Internal")] private static extern int  YTPlayables_InPlayablesEnv();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
-            VerboseLog.Log("YT:Ad", "RegisterAdapter enter — SubsystemRegistration");
+            VerboseLog.Log("YT:Ad", "RegisterAdapter enter — AfterAssembliesLoaded");
             AdSourceRegistry.Register("UNIBRIDGE_YTPLAYABLES", config => new YouTubePlayablesAdSource(), 100);
             Debug.Log("[UniBridge] YouTube Playables ad adapter registered");
             VerboseLog.Log("YT:Ad", "RegisterAdapter done (key=UNIBRIDGE_YTPLAYABLES, priority=100)");

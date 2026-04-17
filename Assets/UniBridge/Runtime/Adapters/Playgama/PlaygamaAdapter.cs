@@ -11,7 +11,7 @@ namespace UniBridge
         /// <summary>
         /// Register this adapter with the runtime. Called automatically at startup.
         /// </summary>
-        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             AdSourceRegistry.Register("UNIBRIDGE_PLAYGAMA", config => new PlaygamaAdapter(config.PlaygamaSettings), 100);

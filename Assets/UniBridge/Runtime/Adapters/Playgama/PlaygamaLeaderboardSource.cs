@@ -9,7 +9,7 @@ namespace UniBridge
 {
     public class PlaygamaLeaderboardSource : ILeaderboardSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             LeaderboardSourceRegistry.Register(

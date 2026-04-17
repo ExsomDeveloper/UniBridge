@@ -8,11 +8,11 @@ namespace UniBridge
 {
     internal static class YouTubePlayablesPlatformProvider
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Register()
         {
-            VerboseLog.Log("YT:Provider", $"Register() enter — RuntimeInitializeOnLoad:SubsystemRegistration | frame={Time.frameCount} | realtime={Time.realtimeSinceStartup:F3}s");
-            // Register unconditionally: ytgame.IN_PLAYABLES_ENV may not yet be populated at SubsystemRegistration time.
+            VerboseLog.Log("YT:Provider", $"Register() enter — RuntimeInitializeOnLoad:AfterAssembliesLoaded | frame={Time.frameCount} | realtime={Time.realtimeSinceStartup:F3}s");
+            // Register unconditionally: ytgame.IN_PLAYABLES_ENV may not yet be populated at AfterAssembliesLoaded time.
             // jslib functions guard on `typeof ytgame !== 'undefined'` internally — safe no-op outside YouTube.
             UniBridgeEnvironment.SetProvider(new YouTubePlayablesPlatformParamsProvider(), "YouTubePlayables");
             VerboseLog.Log("YT:Provider", "Register() done");

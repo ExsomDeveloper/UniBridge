@@ -9,7 +9,7 @@ namespace UniBridge
 {
     public class GameCenterLeaderboardSource : ILeaderboardSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             LeaderboardSourceRegistry.Register(

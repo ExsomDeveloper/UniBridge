@@ -7,7 +7,7 @@ namespace UniBridge
 {
     public class GPGSAuthSource : IAuthSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void Register()
         {
             AuthSourceRegistry.Register("UNIBRIDGELEADERBOARDS_GPGS", _ => new GPGSAuthSource(), 90);

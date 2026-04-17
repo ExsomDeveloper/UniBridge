@@ -20,10 +20,10 @@ namespace UniBridge
         private const long MaxSafeInteger = 9007199254740991L;
         [DllImport("__Internal")] private static extern int  YTPlayables_InPlayablesEnv();
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
-            VerboseLog.Log("YT:LB", "RegisterAdapter enter — SubsystemRegistration");
+            VerboseLog.Log("YT:LB", "RegisterAdapter enter — AfterAssembliesLoaded");
             LeaderboardSourceRegistry.Register(
                 "UNIBRIDGE_YTPLAYABLES",
                 config => new YouTubePlayablesLeaderboardSource(),
