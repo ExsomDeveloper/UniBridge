@@ -9,7 +9,7 @@ namespace UniBridge
 {
     public class UnityIAPPurchaseSource : IPurchaseSource, IDetailedStoreListener
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
 #if (UNITY_ANDROID && UNIBRIDGE_STORE_GOOGLEPLAY) || (UNITY_IOS && UNIBRIDGE_STORE_APPSTORE)

@@ -20,7 +20,7 @@ namespace UniBridge
     {
         private const string SnapshotName = "unibridge_saves_data";
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             SaveSourceRegistry.Register("UNIBRIDGESAVES_GPGS", () => new GPGSSaveSource(), 100);

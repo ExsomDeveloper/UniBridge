@@ -7,7 +7,7 @@ namespace UniBridge
 {
     public class PlaygamaRateSource : IRateSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             RateSourceRegistry.Register("UNIBRIDGE_PLAYGAMA", _ => new PlaygamaRateSource(), 100);

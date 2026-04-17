@@ -9,6 +9,12 @@ namespace UniBridge
         public static bool IsInitialized { get; private set; }
         public static string AdapterName => _source?.GetType().Name ?? UniBridgeAdapterKeys.None;
 
+        /// <summary>
+        /// Current active save source. Exposed for diagnostics, tests and advanced scenarios
+        /// (e.g. when the caller needs to bypass the JSON layer). Null until Initialize().
+        /// </summary>
+        public static ISaveSource CurrentSource => _source;
+
         private static ISaveSource _source;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -68,6 +74,22 @@ namespace UniBridge
             }
 
             _source.Save(key, json, onComplete);
+        }
+
+        /// <summary>
+        /// Loads the raw JSON string associated with the key, bypassing deserialization.
+        /// Use when the caller wants to handle serialization itself (e.g. session caching
+        /// of JSON blobs that will be deserialized into different types later).
+        /// </summary>
+        public static void LoadRaw(string key, Action<bool, string> onComplete)
+        {
+            if (!EnsureInitialized())
+            {
+                onComplete?.Invoke(false, null);
+                return;
+            }
+
+            _source.Load(key, onComplete);
         }
 
         public static void Load<T>(string key, Action<bool, T> onComplete)

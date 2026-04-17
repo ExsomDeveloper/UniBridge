@@ -9,7 +9,7 @@ namespace UniBridge
         public bool IsInitialized { get; private set; }
         public bool IsSupported   => true;
 
-        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             RateSourceRegistry.Register("UNITY_IOS_STOREREVIEW", _ => new AppStoreReviewSource(), 90);

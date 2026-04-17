@@ -85,7 +85,7 @@ Each subsystem uses the same structure:
 
 **Initialization ordering (Unity runtime stages):**
 1. `SubsystemRegistration` — `UniBridgeLogger` subscribes to `Application.logMessageReceivedThreaded` (must run before any `Debug.Log` so early logs aren't lost).
-2. `AfterAssembliesLoaded` — all adapters self-register (`AdSourceRegistry.Register`, `LeaderboardSourceRegistry.Register`, `AuthSourceRegistry.Register`, platform providers via `UniBridgeEnvironment.SetProvider`).
+2. `AfterAssembliesLoaded` — all adapters self-register via their respective registries (`AdSourceRegistry`, `LeaderboardSourceRegistry`, `AuthSourceRegistry`, `PurchaseSourceRegistry`, `SaveSourceRegistry`, `RateSourceRegistry`, `ShareSourceRegistry`, `AnalyticsSourceRegistry`) and platform providers via `UniBridgeEnvironment.SetProvider`.
 3. `BeforeSceneLoad` — facades' `AutoInitialize` runs (`UniBridge`, `UniBridgePurchases`, `UniBridgeLeaderboards`, `UniBridgeSaves`, `UniBridgeRate`, `UniBridgeShare`, `UniBridgeAnalytics`, `UniBridgeAuth`). Also `UniBridgeLogger` creates the MonoBehaviour overlay.
 
 This gives deterministic ordering Logger → Adapters → Facades without relying on `ModuleInitializer` or intra-stage luck. Within a single stage Unity does NOT guarantee method order, so each role must live on its own stage.
@@ -242,6 +242,11 @@ Adapter nuances:
 
 `iCloudSaveSource` uses `NSUbiquitousKeyValueStore` via native Obj-C plugin (`Assets/UniBridge/Plugins/iOS/UniBridgeSavesiOS.mm`). Falls back to `LocalSaveSource` if iCloud unavailable (entitlement missing or not signed in). Requires iCloud KV Storage capability in Xcode.
 
+**Saves API nuances:**
+- `UniBridgeSaves.Load<T>(key, Action<bool, T>)` — typed load; internally deserializes the stored JSON via `Newtonsoft.Json`. Will report `(false, default)` via `onComplete` on deserialization failure (error is logged).
+- `UniBridgeSaves.LoadRaw(key, Action<bool, string>)` — returns the raw JSON string without deserialization. Use when the caller manages typing itself (e.g. session cache that feeds multiple typed consumers) or when the stored data is already a JSON blob to forward as-is. Avoids the `T = string` pitfall where `JsonConvert.DeserializeObject<string>` fails on object literals.
+- `UniBridgeSaves.CurrentSource` — exposes the active `ISaveSource` for diagnostics, tests, or scenarios that need to bypass the JSON layer entirely. Null until `Initialize()` has run.
+
 ### Share Adapters
 
 | Adapter | `#if` Condition |
@@ -338,7 +343,7 @@ UniBridge-owned Android files: `Assets/UniBridge/Plugins/Android/UniBridgeShareP
 | `Assets/UniBridge/Runtime/Purchases/ProductDefinition.cs` | Product config: `ProjectId`, `ProductId`, `Type`, `PlaygamaProductId`, `PlaygamaAmount` |
 | `Assets/UniBridge/Runtime/Purchases/Adapters/Debug/DebugPurchasePanel.cs` | UI Toolkit purchase dialog for Editor testing |
 | `Assets/UniBridge/Runtime/Leaderboards/UniBridgeLeaderboards.cs` | Main leaderboards API |
-| `Assets/UniBridge/Runtime/UniBridgeSaves.cs` | Save/load API; `AdapterName` property |
+| `Assets/UniBridge/Runtime/UniBridgeSaves.cs` | Save/load API: `Save<T>`, `Load<T>`, `LoadRaw`, `Delete`, `HasKey`; `IsInitialized`, `AdapterName`, `CurrentSource` |
 | `Assets/UniBridge/Runtime/UniBridgeSavesConfig.cs` | Saves config |
 | `Assets/UniBridge/Runtime/ISaveSource.cs` | Save adapter interface |
 | `Assets/UniBridge/Runtime/SaveSourceRegistry.cs` | Dictionary-based save adapter registry |

@@ -8,7 +8,7 @@ namespace UniBridge
 {
     public class PlaygamaSaveSource : ISaveSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             SaveSourceRegistry.Register("UNIBRIDGE_PLAYGAMA", () => new PlaygamaSaveSource(), 100);

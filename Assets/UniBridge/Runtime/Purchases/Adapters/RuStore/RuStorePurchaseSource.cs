@@ -8,7 +8,7 @@ namespace UniBridge
 {
     public class RuStorePurchaseSource : IPurchaseSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
 #if UNITY_ANDROID && UNIBRIDGE_STORE_RUSTORE && !UNITY_EDITOR

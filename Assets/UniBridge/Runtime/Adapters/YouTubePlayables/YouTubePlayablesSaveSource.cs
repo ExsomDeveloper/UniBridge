@@ -19,10 +19,10 @@ namespace UniBridge
         [DllImport("__Internal")] private static extern void YTPlayables_LoadData(Action<string> onSuccess, Action<int> onFail);
         [DllImport("__Internal")] private static extern void YTPlayables_SaveData(string data, Action<int> onSuccess, Action<int> onFail);
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
-            VerboseLog.Log("YT:Save", "RegisterAdapter enter — BeforeSceneLoad");
+            VerboseLog.Log("YT:Save", "RegisterAdapter enter — AfterAssembliesLoaded");
             SaveSourceRegistry.Register("UNIBRIDGE_YTPLAYABLES", () => new YouTubePlayablesSaveSource(), 100);
             Debug.Log("[UniBridgeSaves] YouTube Playables save adapter registered");
             VerboseLog.Log("YT:Save", "RegisterAdapter done");

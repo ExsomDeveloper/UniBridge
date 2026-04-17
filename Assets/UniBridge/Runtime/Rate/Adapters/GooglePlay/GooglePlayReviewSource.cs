@@ -13,7 +13,7 @@ namespace UniBridge
 
         private ReviewManager _reviewManager;
 
-        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             RateSourceRegistry.Register("UNIBRIDGERATE_GOOGLEPLAY", _ => new GooglePlayReviewSource(), 100);

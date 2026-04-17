@@ -5,7 +5,7 @@ namespace UniBridge
 {
     /// <summary>
     /// Registry of analytics adapter factories.
-    /// Adapters register via [RuntimeInitializeOnLoadMethod(BeforeSceneLoad)].
+    /// Adapters register via [RuntimeInitializeOnLoadMethod(AfterAssembliesLoaded)].
     /// </summary>
     public static class AnalyticsSourceRegistry
     {

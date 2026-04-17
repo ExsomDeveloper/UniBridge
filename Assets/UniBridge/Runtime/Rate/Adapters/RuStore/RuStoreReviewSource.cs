@@ -10,7 +10,7 @@ namespace UniBridge
         public bool IsInitialized { get; private set; }
         public bool IsSupported   => true;
 
-        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [UnityEngine.RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             RateSourceRegistry.Register("UNIBRIDGERATE_RUSTORE", _ => new RuStoreReviewSource(), 100);

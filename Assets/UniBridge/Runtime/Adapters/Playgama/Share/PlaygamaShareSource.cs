@@ -8,7 +8,7 @@ namespace UniBridge
 {
     public class PlaygamaShareSource : IShareSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             ShareSourceRegistry.Register(

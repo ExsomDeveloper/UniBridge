@@ -9,7 +9,7 @@ namespace UniBridge
 {
     public class AppMetricaAnalyticsSource : IAnalyticsSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
             => AnalyticsSourceRegistry.Register("UNIBRIDGEANALYTICS_APPMETRICA",
                    config => new AppMetricaAnalyticsSource(config), 100);

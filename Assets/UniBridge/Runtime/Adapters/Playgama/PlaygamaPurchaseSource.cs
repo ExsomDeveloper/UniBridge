@@ -8,7 +8,7 @@ namespace UniBridge
 {
     public class PlaygamaPurchaseSource : IPurchaseSource
     {
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         private static void RegisterAdapter()
         {
             PurchaseSourceRegistry.Register("UNIBRIDGE_PLAYGAMA", config => new PlaygamaPurchaseSource(config), 50);

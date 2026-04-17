@@ -5,7 +5,7 @@ namespace UniBridge
 {
     /// <summary>
     /// Registry of share adapter factories.
-    /// Adapters register via [RuntimeInitializeOnLoadMethod(BeforeSceneLoad)].
+    /// Adapters register via [RuntimeInitializeOnLoadMethod(AfterAssembliesLoaded)].
     /// Virtual keys (UNIBRIDGESHARE_ANDROID, UNIBRIDGESHARE_IOS, UNIBRIDGESHARE_MOCK) are handled in the Builder.
     /// </summary>
     public static class ShareSourceRegistry
