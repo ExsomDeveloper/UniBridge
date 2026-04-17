@@ -67,8 +67,11 @@
             /* UB_LOGGER_END */
         </style>
 
+        <!-- YouTube Playables certification MUST: SDK script must be the first <script> in the document. -->
+        <script src="https://www.youtube.com/game_api/v1"></script>
+
         <!-- UB_LOGGER_BEGIN -->
-        <!-- Template-level log capture: install BEFORE any other script so we catch SDK + Unity loader errors. -->
+        <!-- Template-level log capture: installed right after the SDK tag so we still catch loader/createUnityInstance errors. -->
         <script>
             (function () {
                 var BUF = [];
@@ -176,8 +179,6 @@
             })();
         </script>
         <!-- UB_LOGGER_END -->
-
-        <script src="https://www.youtube.com/game_api/v1"></script>
     </head>
     <body>
         <canvas id="canvas"></canvas>

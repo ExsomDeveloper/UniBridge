@@ -1,6 +1,6 @@
 {
   "name": "com.unibridge.core",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "displayName": "UniBridge",
   "description": "Unified cross-platform bridge for Unity: ads, in-app purchases, leaderboards, cloud saves, ratings, sharing, analytics and authentication with a single API across Google Play, App Store, RuStore and Playgama (WebGL)",
   "unity": "2021.3",
