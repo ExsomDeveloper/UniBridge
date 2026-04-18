@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 **UniBridge** is a Unity package providing unified cross-platform APIs for:
-- **Ads**: LevelPlay (Android/iOS), Yandex Mobile Ads (Android/iOS), Playgama (WebGL), YouTube Playables (WebGL, interstitial only), Debug mock (Editor)
+- **Ads**: LevelPlay (Android/iOS), Yandex Mobile Ads (Android/iOS), Playgama (WebGL), YouTube Playables (WebGL, interstitial + rewarded), Debug mock (Editor)
 - **Purchases**: Unity IAP (Google Play / App Store), RuStore Pay (Android), Playgama (WebGL), Debug mock (Editor)
 - **Leaderboards**: Google Play Games Services (Android), Game Center (iOS), Playgama (WebGL), YouTube Playables (WebGL), Simulated fallback, Debug mock (Editor)
 - **Saves**: Google Play Saved Games (Android), iCloud KV Store (iOS), Playgama (WebGL), YouTube Playables (WebGL), Simulated (PlayerPrefs), LocalSaveSource (file system, fallback)
@@ -164,7 +164,7 @@ Adapter registration is gated by `#if` defines, so only the correct adapters for
 | `LevelPlayAdapter` | 100 | `UNIBRIDGE_LEVELPLAY && (UNITY_ANDROID \|\| UNITY_IOS) && !UNITY_EDITOR` |
 | `YandexAdapter` | 90 | `UNIBRIDGE_YANDEX && (UNITY_ANDROID \|\| UNITY_IOS) && !UNITY_EDITOR` |
 | `PlaygamaAdapter` | 100 | `UNIBRIDGE_PLAYGAMA && UNITY_WEBGL` |
-| `YouTubePlayablesAdSource` | 100 | `UNIBRIDGE_YTPLAYABLES && UNITY_WEBGL` (interstitial only) |
+| `YouTubePlayablesAdSource` | 100 | `UNIBRIDGE_YTPLAYABLES && UNITY_WEBGL` (interstitial + rewarded; `placementName` serves as YouTube's `rewardId`) |
 | `DebugAdSource` | — | always (Editor) |
 
 ### Purchase Adapters

@@ -298,6 +298,47 @@ mergeInto(LibraryManager.library, {
         }
     },
 
+    YTPlayables_HasInterstitialApi: function () {
+        if (typeof ytgame === 'undefined') return 0;
+        if (!ytgame.ads) return 0;
+        return typeof ytgame.ads.requestInterstitialAd === 'function' ? 1 : 0;
+    },
+
+    YTPlayables_HasRewardedApi: function () {
+        if (typeof ytgame === 'undefined') return 0;
+        if (!ytgame.ads) return 0;
+        return typeof ytgame.ads.requestRewardedAd === 'function' ? 1 : 0;
+    },
+
+    YTPlayables_RequestRewardedAd: function (rewardIdPtr, onEarnedPtr, onFailPtr) {
+        console.log('[YT:jslib] RequestRewardedAd enter');
+        if (typeof ytgame === 'undefined') {
+            console.warn('[YT:jslib] RequestRewardedAd: ytgame undefined -> fail');
+            {{{ makeDynCall('vi', 'onFailPtr') }}}(0);
+            return;
+        }
+        if (!ytgame.ads) {
+            console.warn('[YT:jslib] RequestRewardedAd: ytgame.ads missing -> fail');
+            {{{ makeDynCall('vi', 'onFailPtr') }}}(0);
+            return;
+        }
+        var rewardId = UTF8ToString(rewardIdPtr);
+        console.log('[YT:jslib] RequestRewardedAd rewardId="' + rewardId + '"');
+        try {
+            ytgame.ads.requestRewardedAd(rewardId).then(function (earned) {
+                var e = earned ? 1 : 0;
+                console.log('[YT:jslib] RequestRewardedAd resolved earned=' + e);
+                {{{ makeDynCall('vi', 'onEarnedPtr') }}}(e);
+            }).catch(function (e) {
+                console.warn('[YT:jslib] RequestRewardedAd rejected:', e);
+                {{{ makeDynCall('vi', 'onFailPtr') }}}(0);
+            });
+        } catch (e) {
+            console.error('[YT:jslib] RequestRewardedAd threw:', e);
+            {{{ makeDynCall('vi', 'onFailPtr') }}}(0);
+        }
+    },
+
     // ── Engagement ───────────────────────────────────────────────────────────
 
     YTPlayables_SendScore: function (score, callbackSuccessPtr, callbackFailPtr) {
