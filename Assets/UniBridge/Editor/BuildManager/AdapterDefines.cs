@@ -17,6 +17,7 @@ namespace UniBridge.Editor
             { "UNIBRIDGE_YANDEX",       "Yandex Ads" },
             { "UNIBRIDGE_PLAYGAMA",     "Playgama" },
             { "UNIBRIDGE_YTPLAYABLES",  "YouTube Playables" },
+            { "UNIBRIDGE_ADS_DEBUG",    "Debug (имитация)" },
             { NoneAdapterKey,        "Нет" },
         };
 
@@ -93,9 +94,9 @@ namespace UniBridge.Editor
 
         public static string[] GetAdAdapters(string buildTarget) => buildTarget switch
         {
-            "Android" or "iOS" => new[] { "UNIBRIDGE_LEVELPLAY", "UNIBRIDGE_YANDEX", NoneAdapterKey },
-            "WebGL"            => new[] { "UNIBRIDGE_PLAYGAMA", "UNIBRIDGE_YTPLAYABLES", NoneAdapterKey },
-            _                  => new[] { NoneAdapterKey },
+            "Android" or "iOS" => new[] { "UNIBRIDGE_LEVELPLAY", "UNIBRIDGE_YANDEX", "UNIBRIDGE_ADS_DEBUG", NoneAdapterKey },
+            "WebGL"            => new[] { "UNIBRIDGE_PLAYGAMA", "UNIBRIDGE_YTPLAYABLES", "UNIBRIDGE_ADS_DEBUG", NoneAdapterKey },
+            _                  => new[] { "UNIBRIDGE_ADS_DEBUG", NoneAdapterKey },
         };
 
         public static string[] GetPurchaseAdapters(string storeDefine) => storeDefine switch

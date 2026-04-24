@@ -129,6 +129,9 @@ namespace UniBridge.Editor
             // "None" — system is intentionally disabled, no warning needed
             if (config.PreferredAdsAdapter == AdapterDefines.NoneAdapterKey) return;
 
+            // Debug (mock) — virtual key, no SDK install required
+            if (config.PreferredAdsAdapter == "UNIBRIDGE_ADS_DEBUG") return;
+
             // Check that the preferred adapter's SDK define is installed
             var group      = EditorUserBuildSettings.selectedBuildTargetGroup;
             var definesRaw = PlayerSettings.GetScriptingDefineSymbolsForGroup(group);

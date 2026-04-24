@@ -24,8 +24,13 @@ namespace UniBridge
 
         private IAdSource GetAdSource(UniBridgeConfig config, Transform root = null)
         {
+            // Explicit virtual key — honor it regardless of platform so QA builds can ship
+            // with mock-ad UI (DebugAdCanvas) without real SDK credentials.
+            if (config != null && config.PreferredAdsAdapter == "UNIBRIDGE_ADS_DEBUG")
+                return CreateDebugAdapter(root);
+
 #if UNITY_EDITOR
-            // Always use debug adapter in editor
+            // Editor fallback: always use debug adapter when nothing explicit is selected.
             return CreateDebugAdapter(root);
 #else
             // Use preferred registered adapter, or fall back to debug

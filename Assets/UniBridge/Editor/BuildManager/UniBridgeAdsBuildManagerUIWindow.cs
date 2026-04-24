@@ -893,6 +893,7 @@ namespace UniBridge.Editor
             if (sdkDefine == "UNITY_IOS_STOREREVIEW")     return true; // встроен в Unity, всегда доступен
             if (sdkDefine == "UNIBRIDGERATE_MOCK")              return true; // заглушка, всегда доступна
             if (sdkDefine == "UNIBRIDGEAUTH_MOCK")              return true; // заглушка, всегда доступна
+            if (sdkDefine == "UNIBRIDGE_ADS_DEBUG")             return true; // имитация рекламы, всегда доступна
             if (sdkDefine == "UNIBRIDGESHARE_ANDROID")          return true; // нативный Android, всегда доступен
             if (sdkDefine == "UNIBRIDGESHARE_IOS")              return true; // нативный iOS, всегда доступен
             if (sdkDefine == "UNIBRIDGESHARE_MOCK")             return true; // заглушка, всегда доступна

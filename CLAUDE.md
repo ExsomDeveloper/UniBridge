@@ -91,6 +91,7 @@ Each subsystem uses the same structure:
 This gives deterministic ordering Logger → Adapters → Facades without relying on `ModuleInitializer` or intra-stage luck. Within a single stage Unity does NOT guarantee method order, so each role must live on its own stage.
 
 **Adapter selection** (`<Subsystem>SourceRegistry.Create(config)`): checks `config.Preferred*Adapter` — if registered, uses it; otherwise uses highest-priority registered adapter. Virtual keys (not real scripting defines) are handled explicitly in the Builder before consulting the registry:
+- **Ads**: `"UNIBRIDGE_ADS_DEBUG"` → `DebugAdSource` on ALL platforms (not just Editor) — for QA builds that need mock-ad UI without real SDK credentials
 - **Leaderboards**: `"UNIBRIDGELEADERBOARDS_SIMULATED"` → `SimulatedLeaderboardSource`; `"UNITY_IOS_GAMECENTER"` treated as always installed in Build Manager UI
 - **Rate**: `"UNIBRIDGERATE_MOCK"` → `MockRateSource` (`IsSupported=false`); `"UNITY_IOS_STOREREVIEW"` → `AppStoreReviewSource` on iOS
 - **Saves**: `"UNIBRIDGESAVES_SIMULATED"` → `SimulatedSaveSource`; `"UNITY_IOS_ICLOUD"` → `iCloudSaveSource` on iOS+AppStore; `"UNIBRIDGE_NONE"` / `""` → `LocalSaveSource`
@@ -123,7 +124,7 @@ Adapter registration is gated by `#if` defines, so only the correct adapters for
 | `UNIBRIDGE_VERBOSE_LOG` | Verbose adapter logging | Manual |
 
 **Config-only "pseudo-defines"** (stored as `Preferred*Adapter` string values, not in PlayerSettings):
-`UNIBRIDGE_NONE`, `UNIBRIDGELEADERBOARDS_SIMULATED`, `UNIBRIDGESAVES_SIMULATED`, `UNIBRIDGERATE_MOCK`, `UNIBRIDGESHARE_MOCK`, `UNIBRIDGEAUTH_MOCK`, `UNITY_IOS_GAMECENTER`, `UNITY_IOS_ICLOUD`, `UNITY_IOS_STOREREVIEW`.
+`UNIBRIDGE_NONE`, `UNIBRIDGE_ADS_DEBUG`, `UNIBRIDGELEADERBOARDS_SIMULATED`, `UNIBRIDGESAVES_SIMULATED`, `UNIBRIDGERATE_MOCK`, `UNIBRIDGESHARE_MOCK`, `UNIBRIDGEAUTH_MOCK`, `UNITY_IOS_GAMECENTER`, `UNITY_IOS_ICLOUD`, `UNITY_IOS_STOREREVIEW`.
 
 `ScriptingDefinesManager` batches define changes via `EditorApplication.delayCall` to avoid repeated recompiles. `SDKVersionChecker` auto-detects installed packages on editor load and syncs defines. On first install, if no `UNIBRIDGE_STORE_*` is active, it auto-selects `UNIBRIDGE_STORE_EDITOR`.
 
@@ -165,7 +166,7 @@ Adapter registration is gated by `#if` defines, so only the correct adapters for
 | `YandexAdapter` | 90 | `UNIBRIDGE_YANDEX && (UNITY_ANDROID \|\| UNITY_IOS) && !UNITY_EDITOR` |
 | `PlaygamaAdapter` | 100 | `UNIBRIDGE_PLAYGAMA && UNITY_WEBGL` |
 | `YouTubePlayablesAdSource` | 100 | `UNIBRIDGE_YTPLAYABLES && UNITY_WEBGL` (interstitial + rewarded; `placementName` serves as YouTube's `rewardId`) |
-| `DebugAdSource` | — | always (Editor) |
+| `DebugAdSource` | — | always (Editor); also on any platform when `PreferredAdsAdapter == "UNIBRIDGE_ADS_DEBUG"` |
 
 ### Purchase Adapters
 
