@@ -14,7 +14,7 @@
             "authAdapter": "UNIBRIDGEAUTH_MOCK",
             "sdkDefines": [
                 "com.google.external-dependency-manager",
-                "UNIBRIDGE_YANDEX"
+                "UNIBRIDGE_LEVELPLAY"
             ]
         },
         {

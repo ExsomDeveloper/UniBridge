@@ -11,11 +11,11 @@
       "hash": "e5e69b3cb3c00b219e315fea34d92a980cf9b11b"
     },
     "com.google.external-dependency-manager": {
-      "version": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.185",
+      "version": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.187",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "8cf54b63e37dceaf1630135f9abddf08167500a1"
+      "hash": "38f31affdc54bf7ed0ffb8b97f3444395912a398"
     },
     "com.unity.2d.animation": {
       "version": "9.2.0",

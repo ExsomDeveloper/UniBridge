@@ -18,9 +18,9 @@
         "latestCheckSource": { "type": "github", "repo": "playgama/bridge-unity" }
     },
     "edm4u": {
-        "version": "1.2.185",
+        "version": "1.2.187",
         "packageId": "com.google.external-dependency-manager",
-        "gitUrl": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.185",
+        "gitUrl": "https://github.com/googlesamples/unity-jar-resolver.git?path=upm#v1.2.187",
         "define": "",
         "displayName": "EDM4U",
         "checkMode": "package",

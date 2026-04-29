@@ -786,43 +786,76 @@ namespace UniBridge.Editor
             if (adAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Реклама:", adAdapters, _selected.adsAdapter,
                     installedDefines,
-                    v => { _selected.adsAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.adsAdapter;          _selected.adsAdapter          = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             if (purchaseAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Покупки:", purchaseAdapters, _selected.purchasesAdapter,
                     installedDefines,
-                    v => { _selected.purchasesAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.purchasesAdapter;    _selected.purchasesAdapter    = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             if (leaderboardAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Лидерборды:", leaderboardAdapters, _selected.leaderboardsAdapter,
                     installedDefines,
-                    v => { _selected.leaderboardsAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.leaderboardsAdapter; _selected.leaderboardsAdapter = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             if (rateAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Оценка:", rateAdapters, _selected.rateAdapter,
                     installedDefines,
-                    v => { _selected.rateAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.rateAdapter;         _selected.rateAdapter         = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             if (shareAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Шаринг:", shareAdapters, _selected.shareAdapter,
                     installedDefines,
-                    v => { _selected.shareAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.shareAdapter;        _selected.shareAdapter        = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             if (saveAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Сохранения:", saveAdapters, _selected.savesAdapter,
                     installedDefines,
-                    v => { _selected.savesAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.savesAdapter;        _selected.savesAdapter        = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             if (analyticsAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Аналитика:", analyticsAdapters, _selected.analyticsAdapter,
                     installedDefines,
-                    v => { _selected.analyticsAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.analyticsAdapter;    _selected.analyticsAdapter    = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
 
             var authAdapters = new List<string>(AdapterDefines.GetAuthAdapters(_selected.define));
             if (authAdapters.Count > 0)
                 _adaptersSection.Add(BuildAdapterRow("Авторизация:", authAdapters, _selected.authAdapter,
                     installedDefines,
-                    v => { _selected.authAdapter = v; StorePresetsManager.Save(_presets); }));
+                    v => { var old = _selected.authAdapter;         _selected.authAdapter         = v; SyncSdkDefinesForAdapterChange(old, v); StorePresetsManager.Save(_presets); RebuildSdkChips(); }));
+        }
+
+        // Keeps the preset's `sdkDefines` chip list aligned with the per-subsystem adapter
+        // selections. Without this, switching e.g. adsAdapter from Yandex to LevelPlay leaves
+        // UNIBRIDGE_YANDEX in sdkDefines, and OnSelectClicked re-applies it on build — the SDK
+        // gets compiled in alongside the new one. Virtual keys (UNIBRIDGE_NONE, *_MOCK,
+        // UNITY_IOS_*, etc.) are absent from _availableSdks (which is built from
+        // SDKVersions.json), so the membership check naturally filters them out.
+        private void SyncSdkDefinesForAdapterChange(string oldAdapter, string newAdapter)
+        {
+            if (_selected == null || oldAdapter == newAdapter) return;
+            if (_selected.sdkDefines == null) _selected.sdkDefines = new List<string>();
+
+            bool IsRealSdk(string key) =>
+                !string.IsNullOrEmpty(key) && _availableSdks.Exists(s => s.identifier == key);
+
+            if (IsRealSdk(newAdapter) && !_selected.sdkDefines.Contains(newAdapter))
+                _selected.sdkDefines.Add(newAdapter);
+
+            if (IsRealSdk(oldAdapter) && !IsAdapterReferencedElsewhere(oldAdapter))
+                _selected.sdkDefines.Remove(oldAdapter);
+        }
+
+        private bool IsAdapterReferencedElsewhere(string adapterKey)
+        {
+            return _selected.adsAdapter          == adapterKey
+                || _selected.purchasesAdapter    == adapterKey
+                || _selected.leaderboardsAdapter == adapterKey
+                || _selected.rateAdapter         == adapterKey
+                || _selected.shareAdapter        == adapterKey
+                || _selected.savesAdapter        == adapterKey
+                || _selected.analyticsAdapter    == adapterKey
+                || _selected.authAdapter         == adapterKey;
         }
 
         private VisualElement BuildAdapterRow(string caption, List<string> adapters, string current,

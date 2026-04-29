@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
@@ -35,6 +36,13 @@ namespace UniBridge.Editor
             public bool HasNewerUpstream => !string.IsNullOrEmpty(LatestVersion) &&
                                             LatestVersion != RequiredVersion &&
                                             IsVersionNewer(LatestVersion, RequiredVersion);
+            // True if we can rewrite the install spec to point at LatestVersion:
+            // empty GitUrl → registry install (packageId@version always works);
+            // non-empty GitUrl → only if it ends with a #vX.Y.Z tag we can substitute
+            // (excludes RuStore's gitflic download URLs which have opaque hashes).
+            public bool CanInstallLatest =>
+                HasNewerUpstream &&
+                (string.IsNullOrEmpty(GitUrl) || Regex.IsMatch(GitUrl, @"#v\d+(?:\.\d+)*$"));
             public string Source    => !string.IsNullOrEmpty(PackageId) ? PackageId : GitUrl;
 
             private static bool IsVersionNewer(string a, string b)
@@ -104,6 +112,7 @@ namespace UniBridge.Editor
         private VisualElement         _sdkChecklistSection;
         private Button                _installBtn;
         private Button                _updateBtn;
+        private Button                _latestBtn;
         private Button                _removeBtn;
         private Button                _installFromFileBtn;
 
@@ -534,11 +543,13 @@ namespace UniBridge.Editor
 
             _installBtn         = CreateButton("Установить",    ColorGreen,                     OnInstallClicked);
             _updateBtn          = CreateButton("Обновить",      ColorYellow,                    OnUpdateClicked);
+            _latestBtn          = CreateButton("Последняя",     ColorBlue,                      OnLatestClicked);
             _removeBtn          = CreateButton("Удалить",       new Color(0.8f, 0.3f, 0.3f),   OnRemoveClicked);
             _installFromFileBtn = CreateButton("Из файла...",   new Color(0.4f, 0.4f, 0.8f),   OnInstallFromFileClicked);
 
             btnRow.Add(_installBtn);
             btnRow.Add(_updateBtn);
+            btnRow.Add(_latestBtn);
             btnRow.Add(_removeBtn);
             btnRow.Add(_installFromFileBtn);
             _detailPanel.Add(btnRow);
@@ -685,6 +696,16 @@ namespace UniBridge.Editor
             _installBtn.style.display = (!e.IsInstalled && !busy)   ? DisplayStyle.Flex : DisplayStyle.None;
             _updateBtn.style.display  = (e.NeedsUpdate   && !busy)  ? DisplayStyle.Flex : DisplayStyle.None;
             _removeBtn.style.display  = (e.IsInstalled   && !busy)  ? DisplayStyle.Flex : DisplayStyle.None;
+
+            if (e.CanInstallLatest && !busy)
+            {
+                _latestBtn.text = $"v{e.LatestVersion} (последняя)";
+                _latestBtn.style.display = DisplayStyle.Flex;
+            }
+            else
+            {
+                _latestBtn.style.display = DisplayStyle.None;
+            }
 
             bool hasDownloadUrl = !string.IsNullOrEmpty(e.CoreUrl) || IsDownloadUrl(e.GitUrl ?? "");
             _installFromFileBtn.style.display = (hasDownloadUrl && !busy) ? DisplayStyle.Flex : DisplayStyle.None;
@@ -835,6 +856,73 @@ namespace UniBridge.Editor
         {
             if (_selected == null || _isOperating) return;
             StartInstall(_selected);
+        }
+
+        private void OnLatestClicked()
+        {
+            if (_selected == null || _isOperating) return;
+            var entry = _selected;
+            string latest = entry.LatestVersion;
+            if (string.IsNullOrEmpty(latest)) return;
+
+            // Mutate in-memory entry: StartInstall reads RequiredVersion / GitUrl directly.
+            entry.RequiredVersion = latest;
+            if (!string.IsNullOrEmpty(entry.GitUrl))
+                entry.GitUrl = Regex.Replace(entry.GitUrl, @"#v\d+(?:\.\d+)*$", $"#v{latest}");
+
+            // Persist to SDKVersions.json so the team and CI pin the same upgraded version.
+            if (!string.IsNullOrEmpty(entry.SdkKey))
+                WriteSdkVersionToJson(entry.SdkKey, latest, entry.GitUrl);
+
+            StartInstall(entry);
+        }
+
+        private static void WriteSdkVersionToJson(string sdkKey, string newVersion, string newGitUrl)
+        {
+            try
+            {
+                const string path = "Assets/UniBridge/Editor/SDKVersions.json";
+                if (!File.Exists(path)) return;
+                string text = File.ReadAllText(path);
+
+                int keyIdx = text.IndexOf($"\"{sdkKey}\":", StringComparison.Ordinal);
+                if (keyIdx < 0) return;
+
+                int braceOpen = text.IndexOf('{', keyIdx);
+                if (braceOpen < 0) return;
+
+                int depth = 0, braceClose = -1;
+                for (int i = braceOpen; i < text.Length; i++)
+                {
+                    if (text[i] == '{') depth++;
+                    else if (text[i] == '}') { depth--; if (depth == 0) { braceClose = i; break; } }
+                }
+                if (braceClose < 0) return;
+
+                string block = text.Substring(braceOpen, braceClose - braceOpen + 1);
+
+                string newBlock = Regex.Replace(block,
+                    @"(""version""\s*:\s*"")[^""]*("")",
+                    m => m.Groups[1].Value + newVersion + m.Groups[2].Value);
+
+                if (!string.IsNullOrEmpty(newGitUrl))
+                {
+                    newBlock = Regex.Replace(newBlock,
+                        @"(""gitUrl""\s*:\s*"")[^""]*("")",
+                        m => m.Groups[1].Value + newGitUrl + m.Groups[2].Value);
+                }
+
+                if (newBlock == block) return;
+
+                string newText = text.Substring(0, braceOpen) + newBlock + text.Substring(braceClose + 1);
+                File.WriteAllText(path, newText);
+                AssetDatabase.ImportAsset(path);
+                Debug.Log($"[UniBridge SDKInstaller] SDKVersions.json: {sdkKey} bumped to {newVersion}");
+            }
+            catch (Exception ex)
+            {
+                Debug.LogWarning($"[UniBridge SDKInstaller] Failed to update SDKVersions.json for {sdkKey}: {ex.Message}");
+            }
         }
 
         private void OnRemoveClicked()
