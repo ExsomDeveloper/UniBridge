@@ -35,7 +35,9 @@
       "mcp__coplay-mcp__set_unity_project_root",
       "mcp__coplay-mcp__read_file",
       "Bash(grep:*)",
-      "Bash(test:*)"
+      "Bash(test:*)",
+      "Read(//Users/exsom/Library/Logs/Unity/**)",
+      "Read(//var/folders/qk/cfkvv6v15qnckvk49qkr25rw0000gn/T/DefaultCompany/RatAds/**)"
     ]
   },
   "enableAllProjectMcpServers": true,

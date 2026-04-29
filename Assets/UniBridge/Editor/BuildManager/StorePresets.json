@@ -1,6 +1,23 @@
 {
     "presets": [
         {
+            "displayName": "Google Play",
+            "define": "UNIBRIDGE_STORE_GOOGLEPLAY",
+            "buildTarget": "Android",
+            "adsAdapter": "UNIBRIDGE_NONE",
+            "purchasesAdapter": "UNIBRIDGE_NONE",
+            "leaderboardsAdapter": "UNIBRIDGE_NONE",
+            "rateAdapter": "UNIBRIDGE_NONE",
+            "shareAdapter": "UNIBRIDGE_NONE",
+            "savesAdapter": "UNIBRIDGE_NONE",
+            "analyticsAdapter": "UNIBRIDGE_NONE",
+            "authAdapter": "UNIBRIDGEAUTH_MOCK",
+            "sdkDefines": [
+                "com.google.external-dependency-manager",
+                "UNIBRIDGE_YANDEX"
+            ]
+        },
+        {
             "displayName": "Playgama",
             "define": "UNIBRIDGE_STORE_PLAYGAMA",
             "buildTarget": "WebGL",
@@ -47,23 +64,6 @@
             "analyticsAdapter": "UNIBRIDGE_NONE",
             "authAdapter": "UNIBRIDGEAUTH_MOCK",
             "sdkDefines": []
-        },
-        {
-            "displayName": "Google Play",
-            "define": "UNIBRIDGE_STORE_GOOGLEPLAY",
-            "buildTarget": "Android",
-            "adsAdapter": "UNIBRIDGE_YANDEX",
-            "purchasesAdapter": "UNIBRIDGEPURCHASES_IAP",
-            "leaderboardsAdapter": "UNIBRIDGELEADERBOARDS_GPGS",
-            "rateAdapter": "UNIBRIDGERATE_GOOGLEPLAY",
-            "shareAdapter": "UNIBRIDGESHARE_ANDROID",
-            "savesAdapter": "UNIBRIDGESAVES_GPGS",
-            "analyticsAdapter": "UNIBRIDGE_NONE",
-            "authAdapter": "UNIBRIDGELEADERBOARDS_GPGS",
-            "sdkDefines": [
-                "com.google.external-dependency-manager",
-                "UNIBRIDGE_YANDEX"
-            ]
         },
         {
             "displayName": "YouTube Playables",

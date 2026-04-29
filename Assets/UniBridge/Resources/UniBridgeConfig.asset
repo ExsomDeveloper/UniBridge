@@ -22,7 +22,7 @@ MonoBehaviour:
   EnableManualCooldown: 0
   ManualCooldownInterval: 60
   AutoInitializeSaves: 1
-  PreferredAdsAdapter: UNIBRIDGE_YTPLAYABLES
+  PreferredAdsAdapter: UNIBRIDGE_NONE
   _levelPlaySettings:
     <AndroidKey>k__BackingField: 
     <IOSKey>k__BackingField: 

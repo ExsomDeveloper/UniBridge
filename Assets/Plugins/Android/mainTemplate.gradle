@@ -4,16 +4,10 @@ apply plugin: 'com.android.library'
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
-    implementation 'androidx.annotation:annotation:1.7.1' // Packages/io.appmetrica.analytics/Editor/AppMetricaDependencies.xml:5
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.5.1' // Packages/ru.rustore.pay/Editor/PayClientDependencies.xml:8
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1' // Packages/ru.rustore.pay/Editor/PayClientDependencies.xml:9
     implementation 'com.google.android.gms:play-services-ads-identifier:18.1.0' // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:12
     implementation 'com.unity3d.ads:unity-ads:4.16.6' // Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:9
     implementation 'com.unity3d.ads-mediation:mediation-sdk:9.3.0' // Assets/LevelPlay/Editor/IronSourceSDKDependencies.xml:5
     implementation 'com.unity3d.ads-mediation:unityads-adapter:5.5.0' // Assets/LevelPlay/Editor/ISUnityAdsAdapterDependencies.xml:5
-    implementation 'io.appmetrica.analytics:analytics:8.0.0' // Packages/io.appmetrica.analytics/Editor/AppMetricaDependencies.xml:4
-    implementation 'ru.rustore.sdk:core:10.1.0' // Packages/ru.rustore.core/Editor/CoreClientDependencies.xml:7
-    implementation 'ru.rustore.sdk:pay:10.1.0' // Packages/ru.rustore.pay/Editor/PayClientDependencies.xml:7
 // Android Resolver Dependencies End
 **DEPS**}
 

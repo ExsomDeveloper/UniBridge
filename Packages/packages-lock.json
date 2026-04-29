@@ -321,29 +321,6 @@
       },
       "url": "https://packages.unity.com"
     },
-    "io.appmetrica.analytics": {
-      "version": "https://github.com/appmetrica/appmetrica-unity-plugin.git#v6.8.0",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {
-        "com.google.external-dependency-manager": "1.2.183"
-      },
-      "hash": "9e7a9a1ced60aad7229fd0758bebdee335584349"
-    },
-    "ru.rustore.core": {
-      "version": "file:/var/folders/qk/cfkvv6v15qnckvk49qkr25rw0000gn/T/DefaultCompany/RatAds/ratads_pkg_1137103468.tgz",
-      "depth": 0,
-      "source": "local-tarball",
-      "dependencies": {}
-    },
-    "ru.rustore.pay": {
-      "version": "file:/var/folders/qk/cfkvv6v15qnckvk49qkr25rw0000gn/T/DefaultCompany/RatAds/ratads_pkg_1256455626.tgz",
-      "depth": 0,
-      "source": "local-tarball",
-      "dependencies": {
-        "ru.rustore.core": "10.1.0"
-      }
-    },
     "com.unity.modules.ai": {
       "version": "1.0.0",
       "depth": 0,
